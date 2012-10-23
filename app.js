@@ -1,5 +1,4 @@
 var express = require('express')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , config = require('./config/config');
@@ -7,7 +6,6 @@ var express = require('express')
 var app = module.exports = express();
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -20,11 +18,14 @@ app.configure(function(){
 
 app.configure('development', function(){
   app.use(express.errorHandler());
+
+  config.setDevelopmentConfig();
+
 });
 
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+http.createServer(app).listen(config.EnvConfig.port, function(){
+  console.log("Express server listening on port " + config.EnvConfig.port);
 });
 
 module.exports.app = app;
