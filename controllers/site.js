@@ -2,7 +2,9 @@
 var EventProvider = require('./../models/event').EventProvider;
 EventProvider = new EventProvider();
 
-
+exports.mickey = function(req, res){
+	res.render('mickey', {title: 'mickey'});
+}
 
 exports.index = function(req, res){
 	res.render('index', {title: 'test'});
