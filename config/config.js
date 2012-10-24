@@ -6,7 +6,7 @@ function setDevelopmentConfig(){
     // These are just examples, insert you info here
     DatabaseConfig.port = 35747;
     DatabaseConfig.host = 'ds035747.mongolab.com';
-    DatabaseConfig.name = 'events';
+    DatabaseConfig.name = 'eventful';
     DatabaseConfig.user = 'eventuser';
     DatabaseConfig.pass = 'event1234';
 
@@ -16,7 +16,7 @@ function setDevelopmentConfig(){
 function setProductionConfig(){
     DatabaseConfig.port = 35747;
     DatabaseConfig.host = 'ds035747.mongolab.com';
-    DatabaseConfig.name = 'events';
+    DatabaseConfig.name = 'eventful';
     DatabaseConfig.user = 'eventuser';
     DatabaseConfig.pass = 'event1234';
 
