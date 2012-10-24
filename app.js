@@ -1,7 +1,7 @@
 var express = require('express')
   , http = require('http')
   , path = require('path')
-  , config = require('./config/config');
+  , config = require('./config');
 
 var app = module.exports = express();
 
