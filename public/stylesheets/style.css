@@ -10,7 +10,11 @@ body{height: 100%;margin: 0;padding: 0;background-color:white;color:black;font-f
 .logo-text{float:left;font-size:18pt;margin-left:14px;font-family:Questrial;font-weight:400;margin-bottom:3px;color:#252523}
 .event-container{background-color: rgba(0,0,0,0.1);width:100%;min-height:100px;-moz-border-radius: 8px;-webkit-border-radius:8px;border-radius:8px;}
 .event-name{font-family:'Raleway';font-size:14pt;color:#191919;font-weight:400;padding-top:5px;padding-left:8px;}
-.event-description{font-family:'Raleway';font-size:10pt;color:#555555;font-weight:400;padding-top:5px;padding-left:8px;}
-.event-datetime{font-family:'Raleway';font-size:12pt;color:#555555;font-weight:400;padding-top:5px;padding-left:8px;}
-.event-location{font-family:'Raleway';font-size:12pt;color:#fc7f02;font-weight:400;padding-top:5px;padding-left:8px;}
+.event-description{font-family:'Raleway';font-size:10pt;color:#555555;font-weight:400;padding-top:8px;padding-left:8px;padding-bottom:5px;}
+.event-datetime{font-family:'Helvetica';font-size:10pt;color:#555555;font-weight:bold;padding-top:5px;padding-left:8px;}
+.event-location{font-family:'Helvetica';font-size:10pt;color:#db7910;font-weight:bold;padding-top:5px;padding-left:8px;}
+
+
+.event-week-label{font-family:'Cabin';font-size:16pt;color:#555555;font-weight:bold;padding-top:20px;padding-bottom:20px;}
+/*.event-location{font-family:'Raleway';font-size:12pt;color:#fc7f02;font-weight:400;padding-top:5px;padding-left:8px;}*/
 
