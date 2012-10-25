@@ -21,13 +21,19 @@ function Controller(){
       //alert('new event');
 
       //backgroundMask.append();
-
-
-      center($('#dlgEditEvent'));
-      $('#dlgEditEvent').show('medium');
+      showEditDialog();
       return false;
     });
 	}
+
+	var showEditDialog = function(){
+    //var mask = "<div class='DOM-mask'>&nbsp</div>";
+    //$('body').append(mask);
+    //center($('#dlgEditEvent'));
+    //$('#dlgEditEvent').show('medium');
+    showDialog($('#dlgEditEvent'));
+	}
+
 	this.wireEventsUp();
 }
 

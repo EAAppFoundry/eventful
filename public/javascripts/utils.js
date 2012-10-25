@@ -6,3 +6,13 @@ function center(div)
 	div.css({"left" : left});
 	return div;
 }
+
+function showDialog(dialog){
+	var mask = '';
+	mask += "<div style='position:fixed;height:100%;width:100%;";
+	mask += "background:#000;background:rgba(0,0,0,.6);";
+	mask += "z-index: 100;top:0;left:a0;'></div>";
+	$('body').append(mask);
+	center(dialog);
+	dialog.show('medium');
+}
