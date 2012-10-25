@@ -35,6 +35,7 @@ EventProvider.prototype.getEvents = function(skip, take, callback){
 };
 
 EventProvider.prototype.getEventsForDate = function(date, callback){
+
 	Event.find({EventDate:date}, function(err, events){
 		callback(null, events);
 	});

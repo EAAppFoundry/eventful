@@ -23,6 +23,20 @@ exports.events = function(req, res){
 	})
 }
 
+exports.eventsForDate = function(req, res){
+	var date = Date.parse(req.params.date);
+	console.log(req.params.date);
+
+	EventProvider.getEventsForDate(date, function(err, events){
+		if(err){
+			console.log('***Bad shit happened getting by date***');
+			res.send(err);
+		} else {
+			res.send(events);
+		}
+	});
+}
+
 exports.save = function(req, res){
 	var formDate = req.body.date;
 	var d = Date.parse(formDate);

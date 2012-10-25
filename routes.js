@@ -27,3 +27,4 @@ app.post('/test', siteController.save);
 app.post('/api/v1/qdate', siteController.queryByDate);
 
 app.get('/api/v1/events', siteController.events);
+app.get('/api/v1/events/:date', siteController.eventsForDate);
