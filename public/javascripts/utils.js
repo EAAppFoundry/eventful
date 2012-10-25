@@ -16,3 +16,26 @@ function showDialog(dialog){
 	center(dialog);
 	dialog.show('medium');
 }
+
+// 15 second timeout.
+function AJAX(type, data, endpoint, callback){
+	jQuery.ajax({
+	   type: type,
+	   url: endpoint,
+	   timeout: 15000,
+	   data: data,
+	   error: function(jqXHR, textStatus, errorThrown){
+		   ajaxErrorHandler(jqXHR, textStatus, errorThrown);
+	   },
+	   success: function(msg){
+		   console.log('successfully called endpoint -> ' + endpoint);
+	     callback(msg);
+	   }
+	 });	
+};
+
+function ajaxErrorHandler(jqXHR, textStatus, errorThrown){
+	console.log('**** AJAX ERROR *****');
+	console.log(textStatus + ' ' + errorThrown.toString());
+	return false;
+}
