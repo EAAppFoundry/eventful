@@ -29,4 +29,6 @@ app.post('/api/v1/qdate', siteController.queryByDate);
 app.get('/api/v1/events', siteController.events);
 // http://localhost:3000/api/v1/events/10-28-2012
 app.get('/api/v1/events/:date', siteController.eventsForDate);
+// hate this route, need to change it... but how?
 app.get('/api/v1/events/id/:id', siteController.eventID);
+app.post('/api/v1/event', siteController.save);
