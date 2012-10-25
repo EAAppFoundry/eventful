@@ -63,30 +63,12 @@ exports.eventID = function(req ,res){
 }
 
 exports.save = function(req, res){
-	var formDate = req.body.date;
-	var d = Date.parse(formDate);
-
-	var formTags = req.body.tags;
-	var tags = formTags.split(',');
-
-	console.log(req.body.private);
-
-	EventProvider.createEvent(
-		d,
-		req.body.time,
-		req.body.name,
-		req.body.description,
-		req.body.location,
-		req.body.organizer,
-		req.body.hashtag, 
-		(req.body.private === 'on'),
-		tags,
-		function(err){
-			EventProvider.getEvents(0,10,function(err, events){
-				res.send(events);
-			})
-		});
-
+	var event = req.body.event;
+  EventProvider.createEvent(event, function(err){
+		EventProvider.getEvents(0,10,function(err, events){
+			res.send(events);
+		})
+	});
 }
 
 exports.queryByDate = function(req, res){

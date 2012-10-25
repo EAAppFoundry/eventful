@@ -47,27 +47,29 @@ EventProvider.prototype.getEventById = function(id, callback){
 	});
 };
 
-EventProvider.prototype.createEvent = function(date, time, name, description, location, 
-												org, hashtag, private, tags, callback){
+EventProvider.prototype.createEvent = function(event, callback){
 	var e = new Event();
 
-	console.log(date);
+  // Don:  the following isn't necessary, the incoming
+  //       event is shaped correctly, but i wasn't sure
+  //       how to cruft up a mongoose event.
 
-	e.EventDate = date;
-	e.Time = time;
-	e.Name = name;
-	e.Description = description;
-	e.Location = location;
-	e.Organizer = org;
-	e.Hashtag = hashtag;
-	e.Private = private;
-	e.Tags = tags;
+	e.EventDate = event.EventDate;
+	e.Time = event.Time;
+	e.Name = event.Name;
+	e.Description = event.Description;
+	e.Location = event.Location;
+	e.Organizer = event.Organizer;
+	e.Hashtag = event.Hashtag;
+	e.Private = event.Private;
+	e.Tags = event.Tags;
 
 	console.log(e);
 
 	e.save(function(err, e){
 		callback(err);
 	});
-};
+};  
+
 
 exports.EventProvider = EventProvider;

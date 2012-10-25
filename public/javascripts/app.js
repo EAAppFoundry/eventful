@@ -7,7 +7,9 @@
 // jquery is ready to go, lets hook events and paint the ui...
 //
 $(document).ready(function(){
-  $('#txtEventDate').datepicker();
+  var now = new Date();
+  $('#txtEventDate').datepicker({dateFormat:'mm-dd-yy'});
+  $('#txtEventDate').datepicker("setDate", new Date());
 	var controller = new Controller();
 });
 
@@ -15,6 +17,8 @@ $(document).ready(function(){
 
 // controller
 function Controller(){
+
+  var events = new Events();
 
 	Controller.prototype.wireEventsUp = function(){
     $('#lnkAddNewEvent').click(function addNewEventClick(){
@@ -36,7 +40,9 @@ function Controller(){
       var event = new Event();
       var eventData = event.create();
       bundleCriteriaForEvent(eventData);
-      
+      events.save(eventData, function eventWasSaved(event){
+        hideDialog($('#dlgEditEvent'));
+      });
       return false;
     });
 
@@ -53,7 +59,7 @@ function Controller(){
   $('#eventsNextWeekContainer').html('');
   $('#eventsFutureContainer').html('');
   
-  var events = new Events();
+  
   events.get(function retrievedEvents(data){
     var thisWeeksEvents = events.filterEventsThisWeek();
     var nextWeeksEvents = events.filterEventsForNextWeek();
@@ -163,7 +169,11 @@ function Events(){
 
 
   Events.prototype.save = function(event, callback){
-    
+    var self = this;
+    AJAX('POST', {event:event}, '/api/v1/events', function savedEvent(event){
+      self._events.push(event);
+      callback(event);  // return event to caller...
+    });
   }
 
   Events.prototype.events = function(){
