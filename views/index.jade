@@ -15,5 +15,35 @@ block content
     div#eventsNextWeekContainer
     div.event-week-label future events
     div#eventsFutureContainer
-  div.large-dialog-box#dlgEditEvent here
+  div.large-dialog-box#dlgEditEvent
+    div.edit-event-label  Edit Event
+    div.formLabel Event Name
+    input(style='margin-left:20px;width:400px;')#txtEventName
+    div.formLabel Description
+    textarea(style='margin-left:20px;height:60px;width:600px')#txtEventDescription
+    div(style='float:left')
+      div.formLabel Date
+      input(style='margin-left:20px')#txtEventDate
+    div(style='float:left')
+      div.formLabel Time (free form text. e.g. 3-6 PM etc...')
+      input(style='margin-left:20px;width:250px')#txtEventTime
+    div(style='float:left;clear:both')
+      div.formLabel Location
+      input(style='margin-left:20px;width:270px')#txtEventLocation
+    div(style='float:left;')
+      div.formLabel Organizer
+      input(style='margin-left:20px;width:270px')#txtEventOrganizer
+    div(style='clear:both;margin-top:10px').formLabel Hashtag (e.g. #hackathonCNN)
+    input(style='margin-left:20px;width:150px')#txtEventHashtag
+    div.formLabel Tags (comma delimited list of tags.  e.g. executives, training, swag)
+    input(style='margin-left:20px;width:450px')#txtEventTags
+    div(style='height:10px')
+    div(style='float:left;margin-left:20px')
+      input(type='checkbox', style='float:left;')#chkEventIsPrivate
+      div(style='float:left;margin-left:10px;').formLabel Is this a private event?
+    div(style='clear:both;float:right;margin-top:20px')
+      a(href='', style='float:right;width:100px;margin-right:35px;margin-left:20px').loginButton#btnSaveEvent Save
+      a(href='', style='float:right;width:100px').loginButton#btnCancelSave Cancel
+    
+
 

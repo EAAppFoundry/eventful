@@ -7,6 +7,7 @@
 // jquery is ready to go, lets hook events and paint the ui...
 //
 $(document).ready(function(){
+  $('#txtEventDate').datepicker();
 	var controller = new Controller();
 });
 
@@ -30,6 +31,19 @@ function Controller(){
       window.location.href = '/signin';
       return false;
     });
+
+    $('#btnSaveEvent').click(function addNewEventClick(){
+      var event = new Event();
+      var eventData = event.create();
+      bundleCriteriaForEvent(eventData);
+      
+      return false;
+    });
+
+    $('#btnCancelSave').click(function addNewEventClick(){
+      hideDialog($('#dlgEditEvent'));
+      return false;
+    });
 	}
 
 
@@ -50,7 +64,18 @@ function Controller(){
     // add spacer to bottom to give room before footer...
     $('#eventsContainer').append("<div style='height:40px;'></div>");
   });
-  $('#eventsThisWeekContainer').html('asdfasdf');
+
+  var bundleCriteriaForEvent = function(event){
+    event.Name = $('#txtEventName').val();
+    event.EventDate = $('#txtEventDate').val();
+    event.Time = $('#txtEventTime').val();
+    event.Description = $('#txtEventDescription').val();
+    event.Location = $('#txtEventLocation').val();
+    event.Organizer = $('#txtEventOrganizer').val();
+    event.Hashtag = $('#txtEventHashtag').val();
+    event.Private = $('#chkEventIsPrivate').attr('checked') === 'checked' ? true : false;
+    event.Tags = $('#txtEventTags').val().split(',');
+  }
 }
 
 
@@ -62,6 +87,7 @@ function Controller(){
 function Event(){
   Event.prototype.create = function(){
   	return {
+      _id:'',
   		Name:'',
   		EventDate:'',
   		Time:'',
@@ -136,8 +162,8 @@ function Events(){
   }
 
 
-  Events.prototype.save = function(callback){
-    throw 'not implemented';
+  Events.prototype.save = function(event, callback){
+    
   }
 
   Events.prototype.events = function(){
