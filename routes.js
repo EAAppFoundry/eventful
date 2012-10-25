@@ -8,13 +8,12 @@ var siteController = require('./controllers/site');
 
 //  routes?
 
-//  get:    /api/v1/events             returns all.  used to paint initial screen
-//  get:    /api/v1/events/[:UTCDate]  returns events for given date
-//  get:    /api/v1/event/[:id]        give me back that event
-//  post:   /api/v1/event              new event from ui.
-//  put:    /api/v1/event              event has been modified in ui.
-//  delete: /api/v1/event/[:id]        delete this event
-//  post:   /api/v1/searchEvents       non restful advanced search (post json packet of search stuffs)
+//  get:    /api/v1/events              returns all.  used to paint initial screen
+//  get:    /api/v1/events/[:id]        give me back that event
+//  post:   /api/v1/events              new event from ui.
+//  put:    /api/v1/events              event has been modified in ui.
+//  delete: /api/v1/events/[:id]        delete this event
+//  post:   /api/v1/events/search       non restful advanced search (post json packet of search stuffs)
 
 //  What else am i missing???
 

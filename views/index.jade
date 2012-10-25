@@ -2,8 +2,10 @@ extends layout
 block content
   div(style='margin-top:0px;width:150px;margin-right:40px;float:left;background-color: rgba(0,0,0,0.1);height:100%;-webkit-border-radius: 8px;-moz-border-radius: 8px;border-radius:8px')
     a(href='')#lnkAddNewEvent.link add a new event?
-    div tag 1
-    div tag 2
+    div
+      span.tag tag 1
+    div
+      span.tag tag 2
     div tag 3
     div tag 4
   div(style='width:80%;float:left')
@@ -17,7 +19,10 @@ block content
               div(style='font-size:12pt;font-family:helvetica;font-weight:bold;color:#555555;margin-left:3px') Oct 31
           td
             div(style='margin-left:15px')
-              div.event-name this is the name of the event right here
+              div(style='float:left')
+                img(style='float:left;margin-top:5px;margin-left:8px', src='images/hand.png')
+                div(style='float:left').event-name this is the name of the event right here (private)
+              div(style='clear:both')
               div.event-description This is the big ole description that tells them what this event is.  asdfasdfasdfasdf asdf as asdf a asdf asdf asdf asdf asdf asf asfd sa
               div.event-location Techwood
               div.event-datetime October 31, 2012  8:00 PM
