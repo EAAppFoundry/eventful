@@ -159,7 +159,7 @@ function eventView(event){
   html +=       "<td style='width:150px;background-color: rgba(0,0,0,0.05)'>";
   html +=         "<div class='event-day-of-week-container'>";
   html +=           "<div class='event-large-day-of-week'>" + day.format('ddd') + "</div>";
-  html +=           "<div style='event-month-day'>" + day.format('MMM') + ' ' +  day.format('D') + "</div>";
+  html +=           "<div class='event-month-day'>" + day.format('MMM') + ' ' +  day.format('D') + "</div>";
   html +=         "</div>";
   html +=       "</td>";
   html +=       "<td>";

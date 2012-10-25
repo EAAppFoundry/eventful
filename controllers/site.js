@@ -11,8 +11,15 @@ exports.test = function(req, res){
 }
 
 exports.signin = function(req, res){
-	res.render('signin', {title: 'signin', layout:'false'});
+	res.render('signin', {title: 'signin', layout:'false', message:''});
 }
+
+exports.signinPost = function(req, res){
+	//res.render('signin', {title: 'signin', layout:'false', message:''});
+	res.redirect('/');
+}
+
+
 
 exports.signup = function(req, res){
 	res.render('signup', {title: 'signup', layout:'false'});

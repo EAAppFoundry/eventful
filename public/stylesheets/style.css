@@ -34,5 +34,154 @@ body{height: 100%;margin: 0;padding: 0;background-color:white;color:black;font-f
 
 .DOM-mask{position:fixed;height:100%;width:100%;background:#000;background:rgba(0,0,0,.6);z-index: 100;top:0;left:a0;}
 .large-dialog-box{display:none;position:absolute;height:440px;width:550px;background-color:#ded9cf;-moz-border-radius:14px;-webkit-border-radius:14px;border-radius:14px;z-index:101;}
+
+
+.formLabel{
+	font-family:'helvetica';
+	font-size:10pt;
+	color:#666666;
+	font-weight:bold;
+	margin-bottom:0px;
+	margin-top:5px;
+
+}
+
+.formLabelGreyedOut{
+	font-family:'helvetica';
+	font-size:10pt;
+	color:#666666;
+	font-weight:bold;
+	height:13px;
+	opacity:.5;
+}
+
+.panelHeaderLabel{
+	font-family:'helvetica';
+	font-size:12pt;
+	color:#666666;
+	font-weight:bold;
+}
+
+.panelSubLabel{
+	font-family:'helvetica';
+	font-size:10pt;
+	color:#666666;
+	font-weight:bold;
+}
+
+.loginButton 
+{  
+	width: 320px;  
+	height: 40px;  
+	line-height: 40px;  
+	color: white;  
+	text-decoration: none;  
+	font-size: 14pt;  
+	font-family:'helvetica';
+	font-weight: bold;  
+	display: block;  
+	text-align: center;  
+	position: relative;  
+	outline: 0;
+	background: -moz-linear-gradient(top, #5daedd, #3d8fbe);
+	background: -webkit-gradient(linear, left top, left bottom, from(#5daedd), to(#3d8fbe));
+	-moz-border-radius: 4px;  
+	-webkit-border-radius: 4px;  
+	border-radius: 4px;  
+	border-width: 1px;
+	border-style: solid;
+	border-color: #3a83ac; 
+ }
+
+.loginButton:hover
+{  
+	background: -moz-linear-gradient(top, #52a3d2, #2d79a5);
+	background: -webkit-gradient(linear, left top, left bottom, from(#52a3d2), to(#2d79a5));
+}
+
+
+.loginTextboxContainer
+{
+    background-color: #fafafa;
+	width:320px;
+	height:34px;
+	padding:0px;
+	margin:0px;
+	border-style:solid;
+	border-width:1px;
+	border-color:#dfe4ea;
+	-moz-border-radius: 5px;  
+	-webkit-border-radius:5px;
+	border-radius: 5px;  
+}
+
+
+
+.loginErrorLabel
+{
+	font-family:'helvetica';
+	font-weight:bold;
+	font-size:14pt;
+	color: #ca1016;
+}
+
+
+.loginTextbox
+{
+
+	background-color: #fafafa;
+	border-width:0px;
+	font-family:verdana;
+	font-family:'helvetica';
+	font-weight:bold;
+	font-size:14pt;
+	color: #424a56;
+	margin:0px;
+	padding:0px;
+	width:290px;
+	height:24px;
+	outline:none;
+}
+
+.loginTextboxGreyedOut
+{
+
+	background-color: #fafafa;
+	border-width:0px;
+	font-family:verdana;
+	font-family:'helvetica';
+	font-weight:bold;
+	font-size:14pt;
+	color: #a8a8a8;
+	margin:0px;
+	padding:0px;
+	width:270px;
+	height:24px;
+	outline:none;
+}
+
+.loginTextboxTextInvisible
+{
+
+	background-color: #fafafa;
+	border-width:0px;
+	font-family:verdana;
+	font-family:'helvetica';
+	font-weight:bold;
+	font-size:14pt;
+	color: #fafafa;
+	margin:0px;
+	padding:0px;
+	width:270px;
+	height:24px;
+	outline:none;
+}
+
+
+
+
+
+
+
 /*.event-location{font-family:'Raleway';font-size:12pt;color:#fc7f02;font-weight:400;padding-top:5px;padding-left:8px;}*/
 

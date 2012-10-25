@@ -25,6 +25,7 @@ app.get('/api/v1/events', siteController.events);
 app.post('/test', siteController.save);
 app.post('/api/v1/qdate', siteController.queryByDate);
 app.get('/signin', siteController.signin);
+app.post('/signin', siteController.signinPost);
 app.get('/signup', siteController.signup);
 
 app.get('/api/v1/events', siteController.events);
