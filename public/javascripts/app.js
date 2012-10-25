@@ -64,9 +64,27 @@ function Controller(){
     var thisWeeksEvents = events.filterEventsThisWeek();
     var nextWeeksEvents = events.filterEventsForNextWeek();
     var futureEvents = events.filterFutureEvents();
-    $('#eventsThisWeekContainer').html(eventsView(thisWeeksEvents));
-    $('#eventsNextWeekContainer').html(eventsView(nextWeeksEvents));
-    $('#eventsFutureContainer').html(eventsView(futureEvents));
+    if(thisWeeksEvents.length > 0){
+      $('#eventsThisWeekContainer').html(eventsView(thisWeeksEvents));
+    }
+    else{
+      $('#eventsThisWeekContainer').html("<div class='event-week-label-small'>No events scheduled for this week...</div>");
+    }
+
+    if(nextWeeksEvents.length > 0){
+      $('#eventsNextWeekContainer').html(eventsView(nextWeeksEvents));
+    }
+    else{
+      $('#eventsNextWeekContainer').html("<div class='event-week-label-small'>No events scheduled for next week...</div>");
+    }
+
+    if(futureEvents.length > 0){
+      $('#eventsFutureContainer').html(eventsView(futureEvents));
+    }
+    else{
+      $('#eventsFutureContainer').html("<div class='event-week-label-small'>No events scheduled for the future...</div>");
+    }
+    
     // add spacer to bottom to give room before footer...
     $('#eventsContainer').append("<div style='height:40px;'></div>");
   });
