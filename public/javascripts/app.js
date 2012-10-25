@@ -18,13 +18,17 @@ $(document).ready(function(){
 function Controller(){
 	Controller.prototype.wireEventsUp = function(){
     $('#lnkAddNewEvent').click(function addNewEventClick(){
-      alert('new event');
+      //alert('new event');
+
+      //backgroundMask.append();
+
+
+      center($('#dlgEditEvent'));
+      $('#dlgEditEvent').show('medium');
       return false;
     });
 	}
-
 	this.wireEventsUp();
-	
 }
 
 //

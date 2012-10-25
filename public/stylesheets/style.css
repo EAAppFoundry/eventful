@@ -20,5 +20,8 @@ body{height: 100%;margin: 0;padding: 0;background-color:white;color:black;font-f
 
 .link{color:#5d8ea3;font-size:10pt;font-family:'Cabin';font-weight:bold;cursor:pointer;text-decoration:none}
 .link:hover{text-decoration:underline;}
+
+.DOM-mask{position:fixed;height:100%;width:100%;background:#000;background:rgba(0,0,0,.6);z-index: 100;top:0;left:a0;}
+.large-dialog-box{display:none;position:absolute;height:440px;width:550px;background-color:#7f7f80;-moz-border-radius:14px;-webkit-border-radius:14px;border-radius:14px;z-index:101;}
 /*.event-location{font-family:'Raleway';font-size:12pt;color:#fc7f02;font-weight:400;padding-top:5px;padding-left:8px;}*/
 
