@@ -4,8 +4,37 @@ block content
   h1= title
   p Welcome to #{title}
 
-  form(method="post", action="/")
+  form(method="post", action="/test")
+    label Date
+    input(type="text", name="date")
+    p
+    label Time
+    input(type="text", name="time")
+    p
+    label Name
     input(type="text", name="name")
+    p
+    label Description
+    input(type="text", name="description")
+    p
+    label Location
+    input(type="text", name="location")
+    p
+    label Organizer
+    input(type="text", name="organizer")
+    p
+    label Hashtag
+    input(type="text", name="hashtag")
+    p
+    label Private
+    input(type="checkbox", name="private")
+    p
+    label Tags
+    input(type="text", name="tags")
+    p
+
+
+
+
     input(type="submit", value="Save")
 
-    

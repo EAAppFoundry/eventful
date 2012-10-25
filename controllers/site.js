@@ -11,15 +11,24 @@ exports.test = function(req, res){
 }
 
 exports.save = function(req, res){
-	var d = Date();
+	var formDate = req.body.date;
+	var d = Date.parse(formDate);
+
+	var formTags = req.body.tags;
+	var tags = formTags.split(',');
+
+	console.log(req.body.private);
 
 	EventProvider.createEvent(
 		d,
-		'1:00pm',
-		'this is a test evnet',
-		'Techwood',
-		'Don Browning',
-		'#test', 
+		req.body.time,
+		req.body.name,
+		req.body.description,
+		req.body.location,
+		req.body.organizer,
+		req.body.hashtag, 
+		(req.body.private === 'on'),
+		tags,
 		function(err){
 			res.send('ok');
 		});
