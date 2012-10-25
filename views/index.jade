@@ -1,15 +1,47 @@
 extends layout
 block content
-  div.event-week-label events happening this week
-  div.event-container
-    div.event-day-of-week-container
-      div(style='font-size:24pt;font-family:helvetica;font-weight:bold;color:#555555') Tue
-      div(style='font-size:12pt;font-family:helvetica;font-weight:bold;color:#555555;margin-left:3px') Oct 31
+  div(style='margin-top:0px;width:150px;margin-right:40px;float:left;background-color: rgba(0,0,0,0.1);height:100%;-webkit-border-radius: 8px;-moz-border-radius: 8px;border-radius:8px')
+    div(style='color:#4062a8;font-weight:bold;font-family:tahoma;font-size:9pt') add a new event?
+    div tag 1
+    div tag 2
+    div tag 3
+    div tag 4
+  div(style='width:80%;float:left')
+    div.event-week-label events happening this week
+    div(style='background-color:rgba(0,0,0,0.1);-moz-border-radius: 8px;-webkit-border-radius:8px;border-radius:8px;height:auto;min-height:1px')
+      table
+        tr
+          td(style='width:150px;background-color: rgba(0,0,0,0.05)')
+            div.event-day-of-week-container
+              div(style='font-size:24pt;font-family:helvetica;font-weight:bold;color:#555555') Tue
+              div(style='font-size:12pt;font-family:helvetica;font-weight:bold;color:#555555;margin-left:3px') Oct 31
+          td
+            div(style='margin-left:15px')
+              div.event-name this is the name of the event right here
+              div.event-description This is the big ole description that tells them what this event is.  asdfasdfasdfasdf asdf as asdf a asdf asdf asdf asdf asdf asf asfd sa
+              div.event-location Techwood
+              div.event-datetime October 31, 2012  8:00 PM
+              div(style='height:8px')
 
-    div(style='float:left')
-      div.event-name this is the name of the event right here
-      div.event-description This is the big ole description that tells them what this event is.  There will be a lot of text here that describes the event.
-      div.event-location Techwood
-      div.event-datetime October 31, 2012  8:00 PM
-  div.event-week-label next week
-  div.event-week-label future
+    div(style='clear:both')
+
+    
+    div(style='clear:both').event-week-label next week
+
+
+    div(style='background-color:rgba(0,0,0,0.1);-moz-border-radius: 8px;-webkit-border-radius:8px;border-radius:8px;height:auto;min-height:1px')
+      table
+        tr
+          td(style='width:150px;background-color: rgba(0,0,0,0.05)')
+            div.event-day-of-week-container
+              div(style='font-size:24pt;font-family:helvetica;font-weight:bold;color:#555555') Tue
+              div(style='font-size:12pt;font-family:helvetica;font-weight:bold;color:#555555;margin-left:3px') Oct 31
+          td
+            div(style='margin-left:15px')
+              div.event-name this is the name of the event right here
+              div.event-description This is the big ole description that tells them what this event is.  asdfasdfasdfasdf asdf as asdf a asdf asdf asdf asdf asdf asf asfd sa
+              div.event-location Techwood
+              div.event-datetime October 31, 2012  8:00 PM
+              div(style='height:8px')
+
+    div.event-week-label future
