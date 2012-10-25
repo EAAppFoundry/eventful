@@ -27,7 +27,9 @@ EventProvider = function(){};
 // TODO:  this method should pull events from TODAY's date forward, not
 //        historical events (at least for v1)
 EventProvider.prototype.getEvents = function(skip, take, callback){
-	Event.find({}, null, {skip:skip, limit:take}, function(err, events){
+	var today = Date();
+
+	Event.find({EventDate: {$gte: today}}, null, {skip:skip, limit:take}, function(err, events){
 		callback(null, events);
 	});
 };
