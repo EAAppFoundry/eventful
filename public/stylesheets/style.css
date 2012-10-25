@@ -8,7 +8,11 @@ body{height: 100%;margin: 0;padding: 0;background-color:white;color:black;font-f
 .footerText{font-family: 'Questrial';font-size: 8pt;line-height: 70%;color:#84827b;font-weight: normal 400;text-decoration: none; } 
 
 .logo-text{float:left;font-size:18pt;margin-left:14px;font-family:Questrial;font-weight:400;margin-bottom:3px;color:#252523}
-.event-container{clear:both;background-color: rgba(0,0,0,0.1);width:100%;-moz-border-radius: 8px;-webkit-border-radius:8px;border-radius:8px;min-height: 100px}
+.event-container{background-color:rgba(0,0,0,0.1);-moz-border-radius: 8px;-webkit-border-radius:8px;border-radius:8px;margin-bottom:15px;}
+.event-large-day-of-week{font-size:24pt;font-family:helvetica;font-weight:bold;color:#555555}
+.event-month-day{font-size:12pt;font-family:helvetica;font-weight:bold;color:#555555;}
+
+
 .event-name{font-family:'Raleway';font-size:14pt;color:#191919;font-weight:400;padding-top:5px;padding-left:8px;}
 .event-name-private{font-family:'Raleway';font-size:8pt;color:#191919;font-weight:700;padding-top:12px;padding-left:12px;}
 .event-description{font-family:'Raleway';font-size:10pt;color:#555555;font-weight:400;padding-top:8px;padding-left:8px;padding-bottom:5px;}

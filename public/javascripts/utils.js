@@ -39,3 +39,18 @@ function ajaxErrorHandler(jqXHR, textStatus, errorThrown){
 	console.log(textStatus + ' ' + errorThrown.toString());
 	return false;
 }
+
+
+var getThisWeekStartDate = function(){
+	var today = new Date();
+	var startOfWeekDate = new Date();
+	startOfWeekDate.setDate(today.getDate() - today.getDay());
+	return startOfWeekDate;
+};
+
+var getThisWeekEndDate = function(){
+	//var today = new Date();
+	var thisWeekStartDate = getThisWeekStartDate();
+	thisWeekStartDate.setDate(thisWeekStartDate.getDate() + 7);
+	return thisWeekStartDate;
+};
