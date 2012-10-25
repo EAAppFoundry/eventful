@@ -23,8 +23,16 @@ var Event = mongoose.model('Event');
 
 EventProvider = function(){};
 
-EventProvider.prototype.getEvents = function(callback){
+EventProvider.prototype.getEvents = function(skip, take, callback){
+	Event.find({}, null, {skip:skip, limit:take}, function(err, events){
+		callback(null, events);
+	});
+};
 
+EventProvider.prototype.getEventsForDate = function(date, callback){
+	Event.find({EventDate:date}, function(err, events){
+		callback(null, events);
+	});
 };
 
 EventProvider.prototype.createEvent = function(date, time, name, description, location, 

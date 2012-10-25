@@ -32,9 +32,9 @@ block content
     label Tags
     input(type="text", name="tags")
     p
-
-
-
-
     input(type="submit", value="Save")
 
+  form(method="post", action="/qdate")
+    label Date
+    input(type="text", name="date")
+    input(type="submit", value="Get")

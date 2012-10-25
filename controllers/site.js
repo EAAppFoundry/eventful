@@ -30,7 +30,18 @@ exports.save = function(req, res){
 		(req.body.private === 'on'),
 		tags,
 		function(err){
-			res.send('ok');
+			EventProvider.getEvents(0,10,function(err, events){
+				res.send(events);
+			})
 		});
 
 }
+
+exports.queryByDate = function(req, res){
+	var d = Date.parse(req.body.date);
+	EventProvider.getEventsForDate(d, function(err, events){
+		res.send(events);
+	})
+}
+
+
