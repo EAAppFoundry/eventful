@@ -41,6 +41,12 @@ EventProvider.prototype.getEventsForDate = function(date, callback){
 	});
 };
 
+EventProvider.prototype.getEventById = function(id, callback){
+	Event.findOne({_id: id}, function(err, event){
+		callback(null, event);
+	});
+};
+
 EventProvider.prototype.createEvent = function(date, time, name, description, location, 
 												org, hashtag, private, tags, callback){
 	var e = new Event();

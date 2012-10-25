@@ -25,13 +25,24 @@ exports.events = function(req, res){
 
 exports.eventsForDate = function(req, res){
 	var date = Date.parse(req.params.date);
-	
+	console.log('here');
 	EventProvider.getEventsForDate(date, function(err, events){
 		if(err){
 			console.log('***Bad shit happened getting by date***');
 			res.send(err);
 		} else {
 			res.send(events);
+		}
+	});
+}
+
+exports.eventID = function(req ,res){
+	EventProvider.getEventById(req.params.id, function(err, event){
+		if(err){
+			console.log('***Damn, bad shit happened***');
+			res.send(err);
+		} else {
+			res.send(event);
 		}
 	});
 }
