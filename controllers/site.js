@@ -10,14 +10,12 @@ exports.test = function(req, res){
 	res.render('test', {title: 'test'});
 }
 
-//
-// return top 1000. too many?  not enough?
-//
+
 exports.events = function(req, res){
 	EventProvider.getEvents(0, 1000, function retrievedAllEvents(err, events){
 		if(err){
 			console.log('*** Exploded trying to retrieve top 1000 events!!!');
-      res.send(err);
+      		res.send(err);
 		}
 		else{
 			res.send(events);
