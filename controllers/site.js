@@ -10,6 +10,14 @@ exports.test = function(req, res){
 	res.render('test', {title: 'test'});
 }
 
+exports.signin = function(req, res){
+	res.render('signin', {title: 'signin', layout:'false'});
+}
+
+exports.signup = function(req, res){
+	res.render('signup', {title: 'signup', layout:'false'});
+}
+
 
 exports.events = function(req, res){
 	EventProvider.getEvents(0, 1000, function retrievedAllEvents(err, events){

@@ -24,6 +24,8 @@ app.get('/test', siteController.test);
 app.get('/api/v1/events', siteController.events);
 app.post('/test', siteController.save);
 app.post('/api/v1/qdate', siteController.queryByDate);
+app.get('/signin', siteController.signin);
+app.get('/signup', siteController.signup);
 
 app.get('/api/v1/events', siteController.events);
 // http://localhost:3000/api/v1/events/10-28-2012
