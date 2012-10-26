@@ -20,6 +20,9 @@ exports.signinPost = function(req, res){
 
 	var username = req.body.username;
 	var password = req.body.password;
+
+  console.log(req.session);
+
 	user.signin(username, password, function(response){
 		if(response.status.code === 'OK'){
 			  console.log('successful login ***********');
