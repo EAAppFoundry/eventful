@@ -3,6 +3,8 @@ var express = require('express')
   , path = require('path')
   , config = require('./config');
 
+
+
 var app = module.exports = express();
 
 app.configure(function(){
@@ -28,9 +30,55 @@ app.configure('development', function(){
 });
 
 
-http.createServer(app).listen(config.EnvConfig.port, function(){
+var server =http.createServer(app).listen(config.EnvConfig.port, function(){
   console.log("Express server listening on port " + config.EnvConfig.port);
 });
 
+var io = require('socket.io').listen(server);
+
+
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+
+
 module.exports.app = app;
 routes = require('./routes');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+var app = require('express')()
+  , server = require('http').createServer(app)
+  , io = require('socket.io').listen(server);
+
+server.listen(80);
+
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
+
+
+
+
+*/

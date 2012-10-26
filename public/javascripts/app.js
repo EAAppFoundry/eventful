@@ -11,6 +11,14 @@ $(document).ready(function(){
   $('#txtEventDate').datepicker({dateFormat:'mm-dd-yy'});
   $('#txtEventDate').datepicker("setDate", new Date());
 	var controller = new Controller();
+
+  var socket = io.connect('/');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+
+
 });
 
 

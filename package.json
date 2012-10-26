@@ -9,7 +9,7 @@
     "express": "3.0.0",
     "jade": "*",
     "mongoose": "latest",
-    "mongo":"latest"
+    "mongo":"latest",
     "socket.io":"0.9.10"
   }
 }

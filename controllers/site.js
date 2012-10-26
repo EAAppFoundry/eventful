@@ -1,3 +1,5 @@
+var user = require('.././models/user');
+
 
 var EventProvider = require('./../models/event').EventProvider;
 EventProvider = new EventProvider();
@@ -15,8 +17,20 @@ exports.signin = function(req, res){
 }
 
 exports.signinPost = function(req, res){
-	//res.render('signin', {title: 'signin', layout:'false', message:''});
-	res.redirect('/');
+
+	var username = req.body.username;
+	var password = req.body.password;
+	user.signin(username, password, function(response){
+		if(response.status.code === 'OK'){
+			  console.log('successful login ***********');
+			  req.session.userID = response.data._id;
+			  console.log('just set the session id: ' + req.session.userID);
+			  res.redirect('/');
+		}
+		else{
+			res.json(response);
+		}
+  });
 }
 
 

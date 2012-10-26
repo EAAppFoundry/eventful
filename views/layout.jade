@@ -21,9 +21,6 @@ html
             div.logo-text eventful
             div(style='float:left;padding-top:4px;margin-left:60px').message Text 'events' to 678-123-4567 to receive a list of events for today!
             div(style='float:right;padding-top:4px;margin-left:40px').headerLink 
-              img(src='images/pencil.png', style='float:left;margin-right:7px;margin-top:1px')
-              div(style='float:left')#lnkSignUp Sign up to receive notifications
-            div(style='float:right;padding-top:4px;margin-left:40px').headerLink 
               img(src='images/person.png', style='float:left;margin-right:7px;margin-top:1px')
               div(style='float:left')#lnkSignIn Sign in
         div(style='float:right;padding-top:4px;margin-left:40px').headerLink 
@@ -42,8 +39,11 @@ html
   script(src="javascripts/jquery-ui-1.9.1.custom/js/jquery-ui-1.9.1.custom.min.js", type="application/javascript")
   script(src="javascripts/moment-min.js", type="application/javascript")
   script(src="javascripts/underscore_1_3_3.js", type="application/javascript")
+  script(src="socket.io/socket.io.js", type="application/javascript")
   script(src="javascripts/utils.js", type="application/javascript")
   script(src="javascripts/app.js", type="application/javascript")
+
+  
 
 
 
