@@ -10,5 +10,6 @@
     "jade": "*",
     "mongoose": "latest",
     "mongo":"latest"
+    "socket.io":"0.9.10"
   }
 }
