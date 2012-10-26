@@ -6,6 +6,7 @@ var express = require('express')
 
 
 var app = module.exports = express();
+var redisStore = require('connect-redis')(express);
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -24,9 +25,12 @@ app.configure(function(){
 
 app.configure('development', function(){
   app.use(express.errorHandler());
-
   config.setDevelopmentConfig();
-
+  // use local session in prod (redis)
+  var store = new redisStore();
+  app.use(express.session({secret:"turner!", 
+                          cookie: { maxAge: 48 * 60 * 60 * 1000 }, 
+                          "store":store} ));
 });
 
 
