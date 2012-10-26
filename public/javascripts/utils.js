@@ -39,6 +39,14 @@ function AJAX(type, data, endpoint, callback){
 	 });	
 };
 
+function flashElement(element){
+  setTimeout(function(){
+    element.fadeIn(750, function done(){
+    	element.effect("highlight", null, "slow", null);
+    });
+  }, 500);  
+}
+
 function ajaxErrorHandler(jqXHR, textStatus, errorThrown){
 	console.log('**** AJAX ERROR *****');
 	console.log(textStatus + ' ' + errorThrown.toString());

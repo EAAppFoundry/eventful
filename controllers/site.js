@@ -1,5 +1,5 @@
 var user = require('.././models/user');
-
+io = module.parent.parent.exports.io;
 
 var EventProvider = require('./../models/event').EventProvider;
 EventProvider = new EventProvider();
@@ -80,11 +80,16 @@ exports.eventID = function(req ,res){
 }
 
 exports.save = function(req, res){
+	//console.log('is this io?');
+	//console.log(io);
 	var event = req.body.event;
-  EventProvider.createEvent(event, function(err){
-		EventProvider.getEvents(0,10,function(err, events){
-			res.send(events);
-		})
+  EventProvider.createEvent(event, function(err, e){
+  	// io.sockets.emit('product.added', product);
+		//EventProvider.getEvents(0,10,function(err, events){
+		//	res.send(events);
+		//})
+    io.sockets.emit('event.added', e);
+    res.send(e);
 	});
 }
 

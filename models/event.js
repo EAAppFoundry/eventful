@@ -67,7 +67,7 @@ EventProvider.prototype.createEvent = function(event, callback){
 	console.log(e);
 
 	e.save(function(err, e){
-		callback(err);
+		callback(err, e);
 	});
 };  
 

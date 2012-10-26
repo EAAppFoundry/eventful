@@ -3,6 +3,10 @@
 // together.  but for the interest of time, you get a single file today.
 
 
+var endOfWeekDate = undefined;
+var endOfNextWeekDate = undefined;
+var events = undefined;
+
 //
 // jquery is ready to go, lets hook events and paint the ui...
 //
@@ -13,20 +17,38 @@ $(document).ready(function(){
 	var controller = new Controller();
 
   var socket = io.connect('/');
+  /*
   socket.on('news', function (data) {
     console.log(data);
     socket.emit('my other event', { my: 'data' });
+  }); */
+
+  socket.on('event.added', function (event) {
+    switch(events.eventDateRangeHitTest(event)){
+      case 'THIS_WEEK':
+        $('#eventsThisWeekContainer').prepend(eventView(event, true));
+        break;
+      case 'NEXT_WEEK':
+        $('#eventsNextWeekContainer').prepend(eventView(event, true));
+        break;
+      case 'FUTURE':
+        $('#eventsFutureContainer').prepend(eventView(event, true));
+        break;
+    }
+    flashElement($('#' +event._id));
   });
 
+  endOfWeekDate = moment(getThisWeekEndDate());
+  endOfNextWeekDate = moment(getThisWeekEndDate());
+  endOfNextWeekDate.add('days', 7);
 
 });
-
 
 
 // controller
 function Controller(){
 
-  var events = new Events();
+  events = new Events();
 
 	Controller.prototype.wireEventsUp = function(){
     $('#lnkAddNewEvent').click(function addNewEventClick(){
@@ -105,7 +127,7 @@ function Controller(){
     event.Location = $('#txtEventLocation').val();
     event.Organizer = $('#txtEventOrganizer').val();
     event.Hashtag = $('#txtEventHashtag').val();
-    event.Private = $('#chkEventIsPrivate').attr('checked') === 'checked' ? true : false;
+    event.Private = $('#chkEventIsPrivate').attr('checked') === 'checked' ? true : undefined;
     event.Tags = $('#txtEventTags').val().split(',');
   }
 }
@@ -149,14 +171,27 @@ function Events(){
     });
   }
 
+
+  var eventDateRangeHitTest = function(event){
+    var day = moment(event.EventDate);
+    if(day <= endOfWeekDate){
+      return 'THIS_WEEK';
+    }
+    else if((day > endOfWeekDate) && (day <= endOfNextWeekDate)){
+      return 'NEXT_WEEK';
+    }
+    else{
+      return 'FUTURE';
+    }
+  }
+
+  Events.prototype.eventDateRangeHitTest = eventDateRangeHitTest;
+
   Events.prototype.filterEventsThisWeek = function(){
     var self = this;
     var filteredEvents = [];
-    var endOfWeekDate = moment(getThisWeekEndDate());
     _.each(self._events, function(event){ 
-      var day = moment(event.EventDate);
-      console.log(endOfWeekDate + '   ' + day);
-      if(day <= endOfWeekDate){
+      if(eventDateRangeHitTest(event) === 'THIS_WEEK'){
         filteredEvents.push(event);
       }
     });
@@ -166,12 +201,8 @@ function Events(){
   Events.prototype.filterEventsForNextWeek = function(){
     var self = this;
     var filteredEvents = [];
-    var endOfWeekDate = moment(getThisWeekEndDate());
-    var endOfNextWeekDate = moment(getThisWeekEndDate());
-    endOfNextWeekDate.add('days', 7);
     _.each(self._events, function(event){ 
-      var day = moment(event.EventDate);
-      if((day > endOfWeekDate) && (day <= endOfNextWeekDate)){
+      if(eventDateRangeHitTest(event) === 'NEXT_WEEK'){
         filteredEvents.push(event);
       }
     });
@@ -181,17 +212,13 @@ function Events(){
   Events.prototype.filterFutureEvents = function(){
     var self = this;
     var filteredEvents = [];
-    var endOfWeekDate = moment(getThisWeekEndDate());
-    var endOfNextWeekDate = moment(getThisWeekEndDate());
-    endOfNextWeekDate.add('days', 7);
     _.each(self._events, function(event){ 
-      var day = moment(event.EventDate);
-      if(day > endOfNextWeekDate){
+      if(eventDateRangeHitTest(event) === 'FUTURE'){
         filteredEvents.push(event);
       }
     });
     return filteredEvents;
-  }
+  }  
 
 
   Events.prototype.save = function(event, callback){
@@ -211,11 +238,17 @@ function Events(){
 
 
 // single view of event
-function eventView(event){
+function eventView(event, doNotDisplay){
   var day = moment(event.EventDate);
   console.log(day.toString());
   var html = '';
-  html += "<div class='event-container'>";
+  if(doNotDisplay){
+    html += "<div class='event-container' style='display:none' id='" + event._id + "'>";
+  }
+  else{
+    html += "<div class='event-container' id='" + event._id + "'>";
+  }
+  
   html +=   "<table>";
   html +=     "<tr>";
   html +=       "<td style='width:150px;background-color: rgba(0,0,0,0.05)'>";

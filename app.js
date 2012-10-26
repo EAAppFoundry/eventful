@@ -53,5 +53,6 @@ io.sockets.on('connection', function (socket) {
 
 
 module.exports.app = app;
+module.exports.io = io;
 routes = require('./routes');
 
