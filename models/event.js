@@ -16,7 +16,7 @@ var Event = new Schema({
     Tags			  : [String]
 });
 
-mongoose.connect('mongodb://' + db.user + ':' + db.pass + '@' + db.host + ':' + db.port + '/' + db.name);
+mongoose.connect('mongodb://' + db.user + ':' + db.pass + '@' + db.host + ':' + db.port + '/' + db.name, {server: {socketOptions: {keepAlive: 1}}});
 mongoose.model('Event', Event, 'events');
 
 var Event = mongoose.model('Event');
