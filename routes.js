@@ -2,7 +2,7 @@
 app = module.parent.exports.app;
 
 var siteController = require('./controllers/site');
-
+var smsController = require('./controllers/sms');
 
 // -------------- mickey comments -------------
 
@@ -35,3 +35,7 @@ app.get('/api/v1/events/:date', siteController.eventsForDate);
 // hate this route, need to change it... but how?
 app.get('/api/v1/events/id/:id', siteController.eventID);
 app.post('/api/v1/events', siteController.save);
+
+app.post('/twil/events', smsController.events);
+app.get('/twil', smsController.index);
+
