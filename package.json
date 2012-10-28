@@ -10,6 +10,7 @@
     "jade": "*",
     "mongoose": "latest",
     "mongo":"latest",
-    "socket.io":"0.9.10"
+    "socket.io":"0.9.10",
+    "connect-redis": "latest"
   }
 }
