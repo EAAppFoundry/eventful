@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head><title>views/index</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="views/index"><meta name="groc-project-path" content="views/index.jade"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">views/index.jade</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nt">extends</span> layout
+<span class="nt">block</span> content
+  <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;margin-top:0px;width:150px;margin-right:40px;float:left;background-color: rgba(0,0,0,0.1);height:100%;-webkit-border-radius: 8px;-moz-border-radius: 8px;border-radius:8px&#39;</span>)
+    <span class="nt">a</span>(<span class="na">href=</span><span class="s">&#39;&#39;</span>)<span class="nf">#lnkAddNewEvent</span><span class="nc">.link</span> add a new event?
+    <span class="nt">div</span>
+      <span class="nt">span</span><span class="nc">.tag</span> tag 1
+    <span class="nt">div</span>
+      <span class="nt">span</span><span class="nc">.tag</span> tag 2
+    <span class="nt">div</span> tag 3
+    <span class="nt">div</span> tag 4
+  <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;width:80%;float:left&#39;</span>)<span class="nf">#eventsContainer</span>
+    <span class="nt">div</span><span class="nc">.event-week-label</span> events happening this week
+    <span class="nt">div</span><span class="nf">#eventsThisWeekContainer</span>
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;padding-top:20px&#39;</span>)<span class="nc">.event-week-label</span> events occuring next week
+    <span class="nt">div</span><span class="nf">#eventsNextWeekContainer</span>
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;padding-top:20px&#39;</span>)<span class="nc">.event-week-label</span> future events
+    <span class="nt">div</span><span class="nf">#eventsFutureContainer</span>
+  <span class="nt">div</span><span class="nc">.large-dialog-box</span><span class="nf">#dlgEditEvent</span>
+    <span class="nt">div</span><span class="nc">.edit-event-label</span>  Edit Event
+    <span class="nt">div</span><span class="nc">.formLabel</span> Event Name
+    <span class="nt">input</span>(<span class="na">style=</span><span class="s">&#39;margin-left:20px;width:400px;&#39;</span>)<span class="nf">#txtEventName</span>
+    <span class="nt">div</span><span class="nc">.formLabel</span> Description
+    <span class="nt">textarea</span>(<span class="na">style=</span><span class="s">&#39;margin-left:20px;height:60px;width:600px&#39;</span>)<span class="nf">#txtEventDescription</span>
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left&#39;</span>)
+      <span class="nt">div</span><span class="nc">.formLabel</span> Date
+      <span class="nt">input</span>(<span class="na">style=</span><span class="s">&#39;margin-left:20px&#39;</span>)<span class="nf">#txtEventDate</span>
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left&#39;</span>)
+      <span class="nt">div</span><span class="nc">.formLabel</span> Time (free form text. e.g. 3-6 PM etc...&#39;)
+      <span class="nt">input</span>(<span class="na">style=</span><span class="s">&#39;margin-left:20px;width:250px&#39;</span>)<span class="nf">#txtEventTime</span>
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left;clear:both&#39;</span>)
+      <span class="nt">div</span><span class="nc">.formLabel</span> Location
+      <span class="nt">input</span>(<span class="na">style=</span><span class="s">&#39;margin-left:20px;width:270px&#39;</span>)<span class="nf">#txtEventLocation</span>
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left;&#39;</span>)
+      <span class="nt">div</span><span class="nc">.formLabel</span> Organizer
+      <span class="nt">input</span>(<span class="na">style=</span><span class="s">&#39;margin-left:20px;width:270px&#39;</span>)<span class="nf">#txtEventOrganizer</span>
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;clear:both;margin-top:10px&#39;</span>)<span class="nc">.formLabel</span> Hashtag (e.g. #hackathonCNN)
+    <span class="nt">input</span>(<span class="na">style=</span><span class="s">&#39;margin-left:20px;width:150px&#39;</span>)<span class="nf">#txtEventHashtag</span>
+    <span class="nt">div</span><span class="nc">.formLabel</span> Tags (comma delimited list of tags.  e.g. executives, training, swag)
+    <span class="nt">input</span>(<span class="na">style=</span><span class="s">&#39;margin-left:20px;width:450px&#39;</span>)<span class="nf">#txtEventTags</span>
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;height:10px&#39;</span>)
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left;margin-left:20px&#39;</span>)
+      <span class="nt">input</span>(<span class="na">type=</span><span class="s">&#39;checkbox&#39;</span><span class="err">,</span> <span class="na">style=</span><span class="s">&#39;float:left;&#39;</span>)<span class="nf">#chkEventIsPrivate</span>
+      <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left;margin-left:10px;&#39;</span>)<span class="nc">.formLabel</span> Is this a private event?
+    <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;clear:both;float:right;margin-top:20px&#39;</span>)
+      <span class="nt">a</span>(<span class="na">href=</span><span class="s">&#39;&#39;</span><span class="err">,</span> <span class="na">style=</span><span class="s">&#39;float:right;width:100px;margin-right:35px;margin-left:20px&#39;</span>)<span class="nc">.loginButton</span><span class="nf">#btnSaveEvent</span> Save
+      <span class="nt">a</span>(<span class="na">href=</span><span class="s">&#39;&#39;</span><span class="err">,</span> <span class="na">style=</span><span class="s">&#39;float:right;width:100px&#39;</span>)<span class="nc">.loginButton</span><span class="nf">#btnCancelSave</span> Cancel
+    </div></div></div></div></body></html>

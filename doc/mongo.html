@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="en"><head><title>mongo</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="mongo"><meta name="groc-project-path" content="mongo.js"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path">mongo.js</div></div><div id="document"><div class="segment"><div class="comments"><div class="wrapper"><h2 id="mongojs">mongo.js</h2>
+
+<p>our mongodb utility library</p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./config&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">mongodb</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./node_modules/mongoose/node_modules/mongodb&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span> <span class="p">(</span><span class="s1">&#39;module: &#39;</span> <span class="o">+</span> <span class="nx">module</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39; has loaded...&#39;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>setup the server info</p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">_conn</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">Server</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">DatabaseConfig</span><span class="p">.</span><span class="nx">host</span><span class="p">,</span> 
+                                <span class="nx">config</span><span class="p">.</span><span class="nx">DatabaseConfig</span><span class="p">.</span><span class="nx">port</span><span class="p">,</span> 
+                                <span class="p">{</span><span class="nx">auto_reconnect</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">poolSize</span><span class="o">:</span><span class="mi">5</span><span class="p">,</span> 
+                                 <span class="nx">socketOptions</span><span class="o">:</span><span class="p">{</span><span class="nx">keepAlive</span><span class="o">:</span><span class="mi">1</span><span class="p">}});</span>
+<span class="kd">var</span> <span class="nx">database</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">Db</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">DatabaseConfig</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">server</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">config</span><span class="p">.</span><span class="nx">DatabaseConfig</span><span class="p">.</span><span class="nx">user</span>
+<span class="kd">var</span> <span class="nx">pass</span> <span class="o">=</span> <span class="nx">config</span><span class="p">.</span><span class="nx">DatabaseConfig</span><span class="p">.</span><span class="nx">pass</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>this method checks the connection state to see if it's not opened</p></div></div><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">mongoIsInAnUnopenedState</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="k">return</span> <span class="p">((</span><span class="nx">_conn</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="o">||</span> 
+          <span class="p">(</span><span class="nx">_conn</span><span class="p">.</span><span class="nx">serverConfig</span><span class="p">.</span><span class="nx">_serverState</span> <span class="o">===</span> <span class="s1">&#39;disconnected&#39;</span><span class="p">))</span> <span class="o">&amp;&amp;</span> 
+         <span class="p">(</span><span class="nx">database</span><span class="p">.</span><span class="nx">serverConfig</span><span class="p">.</span><span class="nx">_serverState</span> <span class="o">!=</span> <span class="s1">&#39;connecting&#39;</span><span class="p">);</span>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>open the connection.. has some nested check logic because we've
+seen some flakeyness with maintaining a connection to mongolab</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">open</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">func</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
+    <span class="k">throw</span> <span class="p">(</span><span class="s1">&#39;you MUST pass in a callback to the open function. &#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">mongoIsInAnUnopenedState</span><span class="p">()){</span>
+      <span class="nx">database</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">conn</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">((</span><span class="nx">user</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">length</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)){</span>
+          <span class="nx">conn</span><span class="p">.</span><span class="nx">authenticate</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err2</span><span class="p">,</span> <span class="nx">authenticatedConn</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">err2</span><span class="p">){</span>
+              <span class="nx">_conn</span> <span class="o">=</span> <span class="nx">conn</span><span class="p">;</span>
+              <span class="nx">func</span><span class="p">(</span><span class="nx">_conn</span><span class="p">);</span>
+               <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;conn was undefined or disconnected. opening...&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** failed to authenticate against mongo!&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">_conn</span> <span class="o">=</span> <span class="nx">conn</span><span class="p">;</span>
+          <span class="nx">func</span><span class="p">(</span><span class="nx">_conn</span><span class="p">);</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;conn was undefined or disconnected. opening...&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** failed to connect to mongo...trying again...&#39;</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;this is the error: &#39;</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="nx">database</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">conn</span><span class="p">){</span>
+          <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">err</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">((</span><span class="nx">user</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">length</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)){</span>
+              <span class="nx">conn</span><span class="p">.</span><span class="nx">authenticate</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">pass</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err2</span><span class="p">,</span> <span class="nx">authenticatedConn</span><span class="p">){</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">err2</span><span class="p">){</span>
+                  <span class="nx">_conn</span> <span class="o">=</span> <span class="nx">conn</span><span class="p">;</span>
+                  <span class="nx">func</span><span class="p">(</span><span class="nx">_conn</span><span class="p">);</span> 
+                <span class="p">}</span>
+                <span class="k">else</span><span class="p">{</span>
+                  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** failed to authenticate against mongo!&#39;</span><span class="p">);</span>
+                <span class="p">}</span>
+              <span class="p">});</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">_conn</span> <span class="o">=</span> <span class="nx">conn</span><span class="p">;</span>
+              <span class="nx">func</span><span class="p">(</span><span class="nx">_conn</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+          <span class="k">else</span><span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;*** FATAL.  failed to connect twice...&#39;</span><span class="p">);</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;this is the error: &#39;</span><span class="p">);</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">});</span> 
+      <span class="p">}</span>
+    <span class="p">});</span> 
+  <span class="p">}</span>
+  <span class="k">else</span><span class="p">{</span>
+    <span class="nx">func</span><span class="p">(</span><span class="nx">_conn</span><span class="p">);</span>
+  <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">addIndex</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">index</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">ensureIndex</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">generatePrimaryKey</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="k">return</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">.</span><span class="nx">createPk</span><span class="p">();</span>
+<span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>does an insert into specified collection</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">insert</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">collectionName</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+      <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">objectWasInserted</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">lastMod</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+        <span class="kd">var</span> <span class="nx">created</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">object</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">object</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="nx">object</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">lastModified</span> <span class="o">=</span> <span class="nx">lastMod</span><span class="p">;</span>
+            <span class="nx">object</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">created</span> <span class="o">=</span> <span class="nx">created</span>
+            <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">.</span><span class="nx">createPk</span><span class="p">();</span>
+            <span class="nx">object</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span>  
+          <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">object</span><span class="p">.</span><span class="nx">lastModified</span> <span class="o">=</span> <span class="nx">lastMod</span><span class="p">;</span>
+          <span class="nx">object</span><span class="p">.</span><span class="nx">created</span> <span class="o">=</span> <span class="nx">created</span>
+          <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">.</span><span class="nx">createPk</span><span class="p">();</span>
+          <span class="nx">object</span><span class="p">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">id</span><span class="p">;</span>    
+        <span class="p">}</span>
+        <span class="nx">coll</span><span class="p">.</span><span class="nx">insert</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">docs</span><span class="p">){</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;***** error when inserting into collection!:&#39;</span><span class="p">);</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+            <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="k">if</span><span class="p">(</span><span class="nx">func</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">object</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">){</span>
+              <span class="nx">func</span><span class="p">(</span><span class="nx">docs</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+              <span class="nx">func</span><span class="p">(</span><span class="nx">docs</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">});</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">}</span>  </div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>updates the provided collection with provided object for specified id</p></div></div><div class="code"><div class="wrapper"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">update</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">object</span><span class="p">,</span> <span class="nx">collectionName</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">object</span><span class="p">.</span><span class="nx">_id</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">){</span>
+    <span class="k">delete</span> <span class="nx">object</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">objId</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">(</span><span class="nx">id</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">findAndModify</span><span class="p">({</span><span class="nx">_id</span><span class="o">:</span><span class="k">new</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">(</span><span class="nx">id</span><span class="p">.</span><span class="nx">toString</span><span class="p">())},</span> 
+                         <span class="p">[[</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span><span class="s1">&#39;asc&#39;</span><span class="p">]],</span> 
+                         <span class="nx">object</span><span class="p">,</span> 
+                         <span class="p">{</span><span class="k">new</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> 
+                         <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">object</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">func</span><span class="p">){</span>
+          <span class="nx">func</span><span class="p">(</span><span class="nx">object</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+  
+<span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>if you have a nested document, e.g. you have an array of subdocuments
+in a field in the document, this func will cascade update all
+documents that contain this object...</p></div></div><div class="code"><div class="wrapper"><span class="c1">//</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">cascadeUpdateSubCollection</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> 
+                                                      <span class="nx">subCollectionName</span><span class="p">,</span> 
+                                                      <span class="nx">object</span><span class="p">,</span> 
+                                                      <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>the id might be an object, or it might just be a string.
+look for either...</p></div></div><div class="code"><div class="wrapper">      <span class="kd">var</span> <span class="nx">queryOne</span> <span class="o">=</span> <span class="p">{};</span>
+      <span class="nx">queryOne</span><span class="p">[</span><span class="nx">subCollectionName</span> <span class="o">+</span> <span class="s1">&#39;._id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">object</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">queryTwo</span> <span class="o">=</span> <span class="p">{};</span>
+      <span class="nx">queryTwo</span><span class="p">[</span><span class="nx">subCollectionName</span> <span class="o">+</span> <span class="s1">&#39;._id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">object</span><span class="p">.</span><span class="nx">_id</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+      
+      <span class="kd">var</span> <span class="nx">updateFragment</span> <span class="o">=</span> <span class="p">{};</span>   
+      <span class="nx">updateFragment</span><span class="p">[</span><span class="nx">subCollectionName</span> <span class="o">+</span> <span class="s1">&#39;.$&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">object</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">updateStatement</span> <span class="o">=</span> <span class="p">{</span><span class="nx">$set</span><span class="o">:</span><span class="nx">updateFragment</span><span class="p">};</span>
+      
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">queryOne</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">queryTwo</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">updateStatement</span><span class="p">);</span>
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">queryOne</span><span class="p">,</span> <span class="nx">updateStatement</span><span class="p">,</span> <span class="p">{</span><span class="nx">multi</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="kd">function</span> <span class="nx">done</span><span class="p">(){</span>
+        <span class="nx">coll</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">queryTwo</span><span class="p">,</span> <span class="nx">updateStatement</span><span class="p">,</span> <span class="p">{</span><span class="nx">multi</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="kd">function</span> <span class="nx">done</span><span class="p">(){</span>
+          <span class="nx">func</span><span class="p">();</span>
+        <span class="p">});</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">query</span><span class="p">).</span><span class="nx">count</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">count</span><span class="p">){</span>
+        <span class="nx">func</span><span class="p">(</span><span class="nx">count</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">findOne</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">collectionName</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>    
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span><span class="nx">_id</span><span class="o">:</span> <span class="k">new</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">(</span><span class="nx">id</span><span class="p">.</span><span class="nx">toString</span><span class="p">())},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">doc</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;  database.js-&gt;findOne()-&gt;  found this document -&gt; &#39;</span> <span class="o">+</span> <span class="nx">doc</span><span class="p">);</span>
+        <span class="nx">func</span><span class="p">(</span><span class="nx">doc</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">findAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">find</span><span class="p">({}).</span><span class="nx">sort</span><span class="p">({</span><span class="nx">lastModified</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}).</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">documents</span><span class="p">){</span>
+        <span class="nx">func</span><span class="p">(</span><span class="nx">documents</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">find</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">query</span><span class="p">).</span><span class="nx">sort</span><span class="p">({</span><span class="nx">lastModified</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}).</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">documents</span><span class="p">){</span>
+        <span class="nx">func</span><span class="p">(</span><span class="nx">documents</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">search</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">fields</span><span class="p">,</span> <span class="nx">sort</span><span class="p">,</span> <span class="nx">limit</span><span class="p">,</span> <span class="nx">skip</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">sortOptions</span> <span class="o">=</span> <span class="p">(</span><span class="nx">sort</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="o">?</span> <span class="p">{</span><span class="nx">lastModified</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span> <span class="o">:</span> <span class="nx">sort</span><span class="p">;</span>
+      <span class="c1">//console.log(sortOptions);</span>
+      <span class="kd">var</span> <span class="nx">maxResults</span> <span class="o">=</span>  <span class="p">((</span><span class="nx">limit</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="o">||</span> 
+                        <span class="p">(</span><span class="nx">limit</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">))</span> <span class="o">?</span> 
+                        <span class="nb">parseInt</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">databaseConfig</span><span class="p">.</span><span class="nx">max_page_results</span><span class="p">)</span> <span class="o">:</span> 
+                        <span class="nx">limit</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">numberToSkip</span> <span class="o">=</span> <span class="p">((</span><span class="nx">skip</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">skip</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">))</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">skip</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">searchQuery</span> <span class="o">=</span> <span class="p">(</span><span class="nx">query</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="o">?</span> <span class="p">{}</span> <span class="o">:</span> <span class="nx">query</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">fieldsToReturn</span> <span class="o">=</span> <span class="p">(</span><span class="nx">fields</span> <span class="o">===</span> <span class="kc">null</span><span class="p">)</span> <span class="o">?</span> <span class="p">{}</span> <span class="o">:</span> <span class="nx">fields</span><span class="p">;</span>   <span class="c1">//{};</span>
+      <span class="kd">var</span> <span class="nx">cursor</span> <span class="o">=</span> <span class="nx">coll</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> 
+                             <span class="nx">fieldsToReturn</span><span class="p">,</span> 
+                             <span class="p">{</span><span class="nx">skip</span><span class="o">:</span><span class="nx">numberToSkip</span><span class="p">,</span> <span class="nx">limit</span><span class="o">:</span><span class="nx">maxResults</span><span class="p">,</span> <span class="nx">sort</span><span class="o">:</span><span class="nx">sortOptions</span><span class="p">});</span>
+      <span class="nx">cursor</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">documents</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+          <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">func</span><span class="p">(</span><span class="nx">documents</span><span class="p">);</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">removeOne</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">id</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>    
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">remove</span><span class="p">({</span><span class="nx">_id</span><span class="o">:</span> <span class="k">new</span> <span class="nx">mongodb</span><span class="p">.</span><span class="nx">ObjectID</span><span class="p">(</span><span class="nx">id</span><span class="p">.</span><span class="nx">toString</span><span class="p">())},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">func</span><span class="p">){</span>
+          <span class="nx">func</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="p">{});</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">removeAll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>    
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">remove</span><span class="p">({},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">func</span><span class="p">){</span>
+          <span class="nx">func</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">distinct</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="nx">field</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">filter</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+  <span class="nx">self</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="kd">function</span> <span class="nx">gotConnection</span><span class="p">(</span><span class="nx">conn</span><span class="p">){</span>
+    <span class="nx">conn</span><span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="nx">collectionName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">coll</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">query</span><span class="p">);</span>
+      <span class="nx">coll</span><span class="p">.</span><span class="nx">distinct</span><span class="p">(</span><span class="nx">field</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">distinctValues</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">values</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">((</span><span class="nx">filter</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">filter</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)){</span>
+          <span class="kd">var</span> <span class="nx">returnValues</span> <span class="o">=</span> <span class="p">[];</span>
+          <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">values</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">values</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">filter</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="o">===</span> <span class="nx">filter</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()){</span>
+              <span class="nx">returnValues</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">values</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+          <span class="nx">func</span><span class="p">(</span><span class="nx">returnValues</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+          <span class="nx">func</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">})</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+  <span class="p">}</span></div></div></div></div></body></html>

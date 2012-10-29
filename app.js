@@ -1,3 +1,8 @@
+// ##App.js
+// This is the app.js file
+// its the main file that drives the app
+// its set up in such a way that you never have to
+// touch it once it's set up (except for config)
 var express = require('express')
   , http = require('http')
   , path = require('path')
@@ -31,17 +36,18 @@ app.configure('development', function(){
                           "store":store} ));
 });
 
-// IMPORTANT: call app router last...
+// **IMPORTANT**: call app router last...
 app.configure(function(){
   app.use(app.router);
 });
 
 
-
+// Spin up the express server
 var server =http.createServer(app).listen(config.EnvConfig.port, function(){
   console.log("Express server listening on port " + config.EnvConfig.port);
 });
 
+// Crank up Socket.io
 var io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
@@ -51,8 +57,10 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-
+// Export the app and IO objects to use later in router.js
 module.exports.app = app;
 module.exports.io = io;
+
+// Loads up the routes.js file
 routes = require('./routes');
 

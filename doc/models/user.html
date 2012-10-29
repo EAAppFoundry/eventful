@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="en"><head><title>models/user</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="models/user"><meta name="groc-project-path" content="models/user.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">models/user.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">cryptography</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../cryptography&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../mongo&#39;</span><span class="p">);</span>
+
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">save</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="nx">user</span><span class="p">.</span><span class="nx">password</span> <span class="o">=</span> <span class="nx">cryptography</span><span class="p">.</span><span class="nx">createHash</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">password</span><span class="p">);</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">insert</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">userWasInserted</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">signin</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">login</span><span class="p">,</span> <span class="nx">password</span><span class="p">,</span> <span class="nx">func</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+
+  <span class="c1">//db.findAll(&#39;users&#39;, function (users){</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>console.log(users);</p></div></div><div class="code"><div class="wrapper">  <span class="c1">//});</span>
+
+
+  <span class="nx">db</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">login</span><span class="o">:</span><span class="p">{</span><span class="nx">$regex</span><span class="o">:</span><span class="nx">login</span><span class="p">,</span> <span class="nx">$options</span><span class="o">:</span> <span class="s1">&#39;i&#39;</span><span class="p">}},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">users</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">((</span><span class="nx">users</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">users</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)){</span>
+      <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">cryptography</span><span class="p">.</span><span class="nx">validateHash</span><span class="p">(</span><span class="nx">users</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">password</span><span class="p">,</span> <span class="nx">password</span><span class="p">)){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;incorrect password&#39;</span><span class="p">);</span>
+        <span class="nx">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="o">:</span><span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="s2">&quot;Password incorrect&quot;</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">},</span><span class="s2">&quot;data&quot;</span><span class="o">:</span><span class="kc">undefined</span><span class="p">};</span>
+      <span class="p">}</span>
+      <span class="k">else</span><span class="p">{</span>
+        <span class="nx">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="o">:</span><span class="s1">&#39;OK&#39;</span><span class="p">,</span><span class="s2">&quot;message&quot;</span><span class="o">:</span><span class="kc">undefined</span><span class="p">},</span><span class="s2">&quot;data&quot;</span><span class="o">:</span><span class="nx">users</span><span class="p">[</span><span class="mi">0</span><span class="p">]};</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+      <span class="nx">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="o">:</span><span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="o">:</span><span class="s1">&#39;error&#39;</span><span class="p">,</span><span class="s2">&quot;user not found&quot;</span><span class="o">:</span><span class="s1">&#39;&#39;</span><span class="p">},</span><span class="s2">&quot;data&quot;</span><span class="o">:</span><span class="kc">undefined</span><span class="p">};</span>
+    <span class="p">}</span>
+    <span class="nx">func</span><span class="p">(</span><span class="nx">ret</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span></div></div></div></div></body></html>

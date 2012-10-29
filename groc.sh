@@ -1,0 +1,1 @@
+groc *.js models/*.js controllers/*.js database/*.js views/*.jade

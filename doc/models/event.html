@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><title>models/event</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="models/event"><meta name="groc-project-path" content="models/event.js"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path">models/event.js</div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">mongoose</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../config&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">config</span><span class="p">.</span><span class="nx">DatabaseConfig</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">Schema</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span><span class="p">,</span> <span class="nx">ObjectID</span> <span class="o">=</span> <span class="nx">Schema</span><span class="p">.</span><span class="nx">ObjectId</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Schema</span><span class="p">({</span>
+    <span class="nx">Name</span>        <span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+    <span class="nx">EventDate</span>         <span class="o">:</span> <span class="nb">Date</span><span class="p">,</span>
+    <span class="nx">Time</span>              <span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+    <span class="nx">Description</span>       <span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+    <span class="nx">Location</span>          <span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+    <span class="nx">Organizer</span>         <span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+    <span class="nx">Hashtag</span>           <span class="o">:</span> <span class="nb">String</span><span class="p">,</span>
+    <span class="nx">Private</span>       <span class="o">:</span> <span class="nb">Boolean</span><span class="p">,</span>
+    <span class="nx">Tags</span>        <span class="o">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">]</span>
+<span class="p">});</span>
+
+<span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">&#39;mongodb://&#39;</span> <span class="o">+</span> <span class="nx">db</span><span class="p">.</span><span class="nx">user</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">db</span><span class="p">.</span><span class="nx">pass</span> <span class="o">+</span> <span class="s1">&#39;@&#39;</span> <span class="o">+</span> <span class="nx">db</span><span class="p">.</span><span class="nx">host</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">db</span><span class="p">.</span><span class="nx">port</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">db</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="p">{</span><span class="nx">server</span><span class="o">:</span> <span class="p">{</span><span class="nx">socketOptions</span><span class="o">:</span> <span class="p">{</span><span class="nx">keepAlive</span><span class="o">:</span> <span class="mi">1</span><span class="p">}}});</span>
+<span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;Event&#39;</span><span class="p">,</span> <span class="nx">Event</span><span class="p">,</span> <span class="s1">&#39;events&#39;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">Event</span> <span class="o">=</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span><span class="p">(</span><span class="s1">&#39;Event&#39;</span><span class="p">);</span>
+
+<span class="nx">EventProvider</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){};</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>TODO:  this method should pull events from TODAY's date forward, not
+       historical events (at least for v1)</p></div></div><div class="code"><div class="wrapper"><span class="nx">EventProvider</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getEvents</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">skip</span><span class="p">,</span> <span class="nx">take</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">today</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">();</span>
+
+  <span class="nx">Event</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">EventDate</span><span class="o">:</span> <span class="p">{</span><span class="nx">$gte</span><span class="o">:</span> <span class="nx">today</span><span class="p">}},</span> <span class="kc">null</span><span class="p">,</span> <span class="p">{</span><span class="nx">skip</span><span class="o">:</span><span class="nx">skip</span><span class="p">,</span> <span class="nx">limit</span><span class="o">:</span><span class="nx">take</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">events</span><span class="p">){</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">events</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">EventProvider</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getEventsForDate</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">date</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+
+  <span class="nx">Event</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">EventDate</span><span class="o">:</span><span class="nx">date</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">events</span><span class="p">){</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">events</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">EventProvider</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">getEventById</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="nx">Event</span><span class="p">.</span><span class="nx">findOne</span><span class="p">({</span><span class="nx">_id</span><span class="o">:</span> <span class="nx">id</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">event</span><span class="p">){</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">event</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">EventProvider</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">createEvent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">callback</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Event</span><span class="p">();</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Don:  the following isn't necessary, the incoming
+      event is shaped correctly, but i wasn't sure
+      how to cruft up a mongoose event.</p></div></div><div class="code"><div class="wrapper">  <span class="nx">e</span><span class="p">.</span><span class="nx">EventDate</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">EventDate</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">Time</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Time</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">Name</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Name</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">Description</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Description</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">Location</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Location</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">Organizer</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Organizer</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">Hashtag</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Hashtag</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">Private</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Private</span><span class="p">;</span>
+  <span class="nx">e</span><span class="p">.</span><span class="nx">Tags</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Tags</span><span class="p">;</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+
+  <span class="nx">e</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">e</span><span class="p">){</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">e</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">};</span>  
+
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">EventProvider</span> <span class="o">=</span> <span class="nx">EventProvider</span><span class="p">;</span></div></div></div></div></body></html>

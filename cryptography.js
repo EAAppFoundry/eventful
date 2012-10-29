@@ -1,3 +1,5 @@
+// ##cryptography.js
+// used to hash passwords for login
 var crypto = require('crypto');
 
 var SaltLength = 9;

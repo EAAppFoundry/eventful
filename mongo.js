@@ -1,3 +1,5 @@
+// ##mongo.js
+// our mongodb utility library
 var config = require('./config');
 var mongodb = require('./node_modules/mongoose/node_modules/mongodb');
 var events = require('events');
@@ -5,6 +7,7 @@ var util = require('util');
 
 console.log ('module: ' + module.id + ' has loaded...');
 
+// setup the server info
 var _conn = undefined;
 var server = new mongodb.Server(config.DatabaseConfig.host, 
                                 config.DatabaseConfig.port, 
@@ -14,12 +17,15 @@ var database = new mongodb.Db(config.DatabaseConfig.name, server);
 var user = config.DatabaseConfig.user
 var pass = config.DatabaseConfig.pass;
 
+// this method checks the connection state to see if it's not opened
 var mongoIsInAnUnopenedState = function(){
   return ((_conn === undefined) || 
 	        (_conn.serverConfig._serverState === 'disconnected')) && 
 	       (database.serverConfig._serverState != 'connecting');
 }
 
+// open the connection.. has some nested check logic because we've
+// seen some flakeyness with maintaining a connection to mongolab
 module.exports.open = function(func){
 	if(func === undefined){
 		throw ('you MUST pass in a callback to the open function. ');
@@ -96,7 +102,7 @@ module.exports.generatePrimaryKey = function(){
 	return mongodb.ObjectID.createPk();
 }
 
-
+// does an insert into specified collection
 module.exports.insert = function(object, collectionName, func){
 		var self = this;
 		self.open(function gotConnection(conn){
@@ -136,6 +142,7 @@ module.exports.insert = function(object, collectionName, func){
 		});
 	}  
 
+// updates the provided collection with provided object for specified id
 module.exports.update = function (id, object, collectionName, func){
 	var self = this;
 	if(object._id !== undefined){
