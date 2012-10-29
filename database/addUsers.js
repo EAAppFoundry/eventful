@@ -15,3 +15,5 @@ db.removeAll('users', function(){
     console.log(result);
   });
 });
+
+process.exit();

@@ -34,7 +34,7 @@ exports.events = function(req, res){
 			
 			break;
 		
-		case(body === 'cnn' || body === 'techwood' || body === 'twc'):
+		case(body === 'cnn' || body === 'techwood' || body === 'twc' || body === 'ct'):
 			EventProvider.queryEvents({EventDate:d, Location: body}, function(err, events){
 				message += 'Found ' + events.length + ' events';
 				for(var i=0;i<events.length;i++) {

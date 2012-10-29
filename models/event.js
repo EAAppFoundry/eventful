@@ -13,7 +13,8 @@ var Event = new Schema({
     Organizer         : String,
     Hashtag           : String,
     Private			  : Boolean,
-    Tags			  : [String]
+    Tags			  : [String],
+    PassbookURL	      : String
 });
 
 mongoose.connect('mongodb://' + db.user + ':' + db.pass + '@' + db.host + ':' + db.port + '/' + db.name, {server: {socketOptions: {keepAlive: 1}}});
@@ -68,6 +69,7 @@ EventProvider.prototype.createEvent = function(event, callback){
 	e.Hashtag = event.Hashtag;
 	e.Private = event.Private;
 	e.Tags = event.Tags;
+	e.PassbookURL = event.PassbookURL;
 
 	console.log(e);
 
@@ -75,6 +77,12 @@ EventProvider.prototype.createEvent = function(event, callback){
 		callback(err, e);
 	});
 };  
+
+EventProvider.prototype.clear = function(callback){
+	Event.collection.drop(function(err){
+		callback();
+	})
+}
 
 function createTimelessDate() {
 	// Doing this to create a date w/a time of 00:00:00
