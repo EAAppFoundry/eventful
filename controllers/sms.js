@@ -16,29 +16,35 @@ exports.events = function(req, res){
 	console.log('To ' + to);
 	console.log('Body ' + body);
 
+	// Doing this to create a date w/a time of 00:00:00
+	var today = new Date();
+	var s = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getFullYear();
+	var d = new Date(s);
+
 	switch(true) {
 		case(body === 'events'):
-			var d = new Date('10-27-2012');
 			EventProvider.getEventsForDate(d, function(err, events){
 				message += 'Found ' + events.length + ' events: \n';
 				for(var i = 0;i<events.length;i++) {
 					message += events[i].Name + '\n';
 				}
 				console.log('message ' + message);
-				res.send (message);
+				res.send (createResponse(message));
 			})
 			
 			break;
 		
-		case(body === 'cnn'):
-			console.log('query based on cnn');
+		case(body === 'cnn' || body === 'techwood' || body === 'twc'):
+			EventProvider.queryEvents({EventDate:d, Location: body}, function(err, events){
+				message += 'Found ' + events.length + ' events';
+				for(var i=0;i<events.length;i++) {
+					message += events[i].Name + '\n';
+				}
+				console.log('message ' + message);
+				res.send(createResponse(message));
+			});
 			break;
-		
-		case(body === 'techwood'):
-			console.log('find techwood events');
-			break;
-		case(body === 'twc'):
-			break;
+
 		default:
 			res.send(helpString());
 			break;

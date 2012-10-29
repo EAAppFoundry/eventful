@@ -27,7 +27,7 @@ EventProvider = function(){};
 // TODO:  this method should pull events from TODAY's date forward, not
 //        historical events (at least for v1)
 EventProvider.prototype.getEvents = function(skip, take, callback){
-	var today = Date();
+	var today = createTimelessDate();
 
 	Event.find({EventDate: {$gte: today}}, null, {skip:skip, limit:take}, function(err, events){
 		callback(null, events);
@@ -47,18 +47,23 @@ EventProvider.prototype.getEventById = function(id, callback){
 	});
 };
 
+EventProvider.prototype.queryEvents = function(query, callback) {
+	Event.find(query, function(err, events){
+		callback(null, events);
+	});
+};
+
+
 EventProvider.prototype.createEvent = function(event, callback){
 	var e = new Event();
 
-  // Don:  the following isn't necessary, the incoming
-  //       event is shaped correctly, but i wasn't sure
-  //       how to cruft up a mongoose event.
-
+ 	// todo: there has to be a better way to map a JSON object
+ 	// to a corresponding Mongoose model
 	e.EventDate = event.EventDate;
 	e.Time = event.Time;
 	e.Name = event.Name;
 	e.Description = event.Description;
-	e.Location = event.Location;
+	e.Location = event.Location.toLowerCase();
 	e.Organizer = event.Organizer;
 	e.Hashtag = event.Hashtag;
 	e.Private = event.Private;
@@ -71,5 +76,12 @@ EventProvider.prototype.createEvent = function(event, callback){
 	});
 };  
 
+function createTimelessDate() {
+	// Doing this to create a date w/a time of 00:00:00
+	var today = new Date();
+	var s = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getFullYear();
+	var d = new Date(s);
+	return d;
+}
 
 exports.EventProvider = EventProvider;
