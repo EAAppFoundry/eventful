@@ -43,7 +43,7 @@ app.configure(function(){
 
 
 // Spin up the express server
-var server =http.createServer(app).listen(config.EnvConfig.port, function(){
+var server =http.createServer(app).listen((process.env.port || config.EnvConfig.port), function(){
   console.log("Express server listening on port " + config.EnvConfig.port);
 });
 
