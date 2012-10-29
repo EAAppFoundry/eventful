@@ -36,6 +36,7 @@ $(document).ready(function(){
         break;
     }
     flashElement($('#' +event._id));
+    events.events().push(event);
   });
 
   endOfWeekDate = moment(getThisWeekEndDate());
