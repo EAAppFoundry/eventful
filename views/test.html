@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><title>views/test</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="views/test"><meta name="groc-project-path" content="views/test.jade"><meta name="groc-github-url" content="https://github.com/EAAppFoundry/eventful"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/EAAppFoundry/eventful/blob/master/views/test.jade">views/test.jade</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="nt">extends</span> layout
+
+<span class="nt">block</span> content
+  <span class="nt">h1</span><span class="p">=</span> <span class="n">title</span>
+  <span class="nt">p</span> Welcome to <span class="si">#{</span><span class="n">title</span><span class="si">}</span>
+
+  <span class="nt">form</span>(<span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="err">,</span> <span class="na">action=</span><span class="s">&quot;/test&quot;</span>)
+    <span class="nt">label</span> Date
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;date&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">label</span> Time
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;time&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">label</span> Name
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">label</span> Description
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;description&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">label</span> Location
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;location&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">label</span> Organizer
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;organizer&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">label</span> Hashtag
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;hashtag&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">label</span> Private
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;checkbox&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;private&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">label</span> Tags
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;tags&quot;</span>)
+    <span class="nt">p</span>
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="err">,</span> <span class="na">value=</span><span class="s">&quot;Save&quot;</span>)
+
+  <span class="nt">form</span>(<span class="na">method=</span><span class="s">&quot;post&quot;</span><span class="err">,</span> <span class="na">action=</span><span class="s">&quot;/qdate&quot;</span>)
+    <span class="nt">label</span> Date
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;text&quot;</span><span class="err">,</span> <span class="na">name=</span><span class="s">&quot;date&quot;</span>)
+    <span class="nt">input</span>(<span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="err">,</span> <span class="na">value=</span><span class="s">&quot;Get&quot;</span>)</div></div></div></div></body></html>
