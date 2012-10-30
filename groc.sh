@@ -1,1 +1,1 @@
-groc --github true *.js models/*.js controllers/*.js database/*.js views/*.jade
+groc --github --index app.js true *.js models/*.js controllers/*.js database/*.js views/*.jade
