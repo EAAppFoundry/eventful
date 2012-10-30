@@ -21,6 +21,7 @@ input:focus,select:focus,textarea:focus {outline: none;}
 .event-name-private{font-family:'Raleway';font-size:8pt;color:#191919;font-weight:700;padding-top:12px;padding-left:12px;}
 .event-description{font-family:'Raleway';font-size:10pt;color:#555555;font-weight:400;padding-top:8px;padding-left:8px;padding-bottom:5px;}
 .event-datetime{font-family:'Helvetica';font-size:10pt;color:#555555;font-weight:bold;padding-top:5px;padding-left:8px;}
+.event-url{font-family:'Helvetica';font-size:10pt;color:#5d8ea3;font-weight:bold;margin-top:8px;padding-left:8px;}
 .event-location{font-family:'Helvetica';font-size:10pt;color:#db7910;font-weight:bold;padding-top:5px;padding-left:8px;}
 .event-day-of-week-container{float:left;padding-top:20px;padding-left:20px;margin-bottom:20px;}
 

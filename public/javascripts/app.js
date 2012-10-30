@@ -130,6 +130,7 @@ function Controller(){
     event.Hashtag = $('#txtEventHashtag').val();
     event.Private = $('#chkEventIsPrivate').attr('checked') === 'checked' ? true : undefined;
     event.Tags = $('#txtEventTags').val().split(',');
+    event.PassbookURL = $('#txtEventPassbookURL').val();
   }
 }
 
@@ -273,7 +274,10 @@ function eventView(event, doNotDisplay){
   html +=           "<div style='clear:both'></div>";
   html +=           "<div class='event-description'>" + event.Description + "</div>";
   html +=           "<div class='event-location'>" + event.Location + "</div>";
-  html +=           "<div class='event-datetime' style='margin-bottom:8px'>" + day.format('MMMM Do YYYY') + '&nbsp &nbsp' + event.Time + "</div>";
+  html +=           "<div class='event-datetime' >" + day.format('MMMM Do YYYY') + '&nbsp &nbsp' + event.Time + "</div>";
+  html +=           "<div style='height:5px'></div>";
+  html +=           "<a target='_blank' href='" + event.PassbookURL + "''  class='event-url'>" + event.PassbookURL + "</a>";
+  html +=           "<div style='height:5px'></div>";
   html +=         "</div>";
   html +=       "</td>";
   html +=     "</tr>";
