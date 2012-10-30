@@ -14,11 +14,6 @@ module.exports.save = function(user, callback){
 module.exports.signin = function(login, password, func){
 	var ret = undefined;
 
-  //db.findAll('users', function (users){
-  //  console.log(users);
-  //});
-
-
 	db.find('users', {login:{$regex:login, $options: 'i'}}, function(users){
 		if((users) && (users.length === 1)){
 			if(!cryptography.validateHash(users[0].password, password)){

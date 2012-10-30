@@ -1,11 +1,21 @@
 var user = require('.././models/user');
+var db = require('.././mongo');
 io = module.parent.parent.exports.io;
 
 var EventProvider = require('./../models/event').EventProvider;
 EventProvider = new EventProvider();
 
 exports.index = function(req, res){
-	res.render('index', {title: 'index'});
+	if(req.session.userID){
+		db.findOne(req.session.userID, 'users', function foundUser(user){
+			console.log('user?');
+			console.log(user);
+      res.render('index', {title: 'index', user:user});
+	  });
+	}
+	else{
+    res.render('index', {title: 'index', user:undefined});
+	}
 }
 
 exports.test = function(req, res){
@@ -79,15 +89,13 @@ exports.eventID = function(req ,res){
 	});
 }
 
+
+//
+// TODO:  secure this api method!
+//
 exports.save = function(req, res){
-	//console.log('is this io?');
-	//console.log(io);
 	var event = req.body.event;
   EventProvider.createEvent(event, function(err, e){
-  	// io.sockets.emit('product.added', product);
-		//EventProvider.getEvents(0,10,function(err, events){
-		//	res.send(events);
-		//})
     io.sockets.emit('event.added', e);
     res.send(e);
 	});
