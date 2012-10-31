@@ -1,5 +1,5 @@
 // ##user.js
-// ###This is an example of a mongodb model that doesn't use mongoose
+// ####This is an example of a mongodb model that doesn't use mongoose
 
 // require in some necessary stuff
 var cryptography = require('../cryptography');
