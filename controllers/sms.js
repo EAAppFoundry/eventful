@@ -69,6 +69,7 @@ function formatResponse(location, events){
 		
 		for(var i = 0;i<events.length;i++) {
 			message += events[i].Name + '\n';
+			message += 'Ticket: ' + events[i].PassbookURL + '\n';
 		}
 	}
 	console.log('message ' + message);
