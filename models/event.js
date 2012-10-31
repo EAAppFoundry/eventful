@@ -1,5 +1,5 @@
 // ##event.js
-// ###Example of using mongoose to access mongodb
+// ####Example of using mongoose to access mongodb
 
 var mongoose = require('mongoose');
 
