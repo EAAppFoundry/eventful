@@ -1,11 +1,21 @@
 <!DOCTYPE html><html lang="en"><head><title>controllers/site</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content="../"><meta name="groc-document-path" content="controllers/site"><meta name="groc-project-path" content="controllers/site.js"><meta name="groc-github-url" content="https://github.com/EAAppFoundry/eventful"><link rel="stylesheet" type="text/css" media="all" href="../assets/style.css"><script type="text/javascript" src="../assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/EAAppFoundry/eventful/blob/master/controllers/site.js">controllers/site.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;.././models/user&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;.././mongo&#39;</span><span class="p">);</span>
 <span class="nx">io</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="nx">io</span><span class="p">;</span>
 
 <span class="kd">var</span> <span class="nx">EventProvider</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./../models/event&#39;</span><span class="p">).</span><span class="nx">EventProvider</span><span class="p">;</span>
 <span class="nx">EventProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">EventProvider</span><span class="p">();</span>
 
 <span class="nx">exports</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-  <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span><span class="p">});</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">userID</span><span class="p">){</span>
+    <span class="nx">db</span><span class="p">.</span><span class="nx">findOne</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">session</span><span class="p">.</span><span class="nx">userID</span><span class="p">,</span> <span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="nx">foundUser</span><span class="p">(</span><span class="nx">user</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;user?&#39;</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span><span class="nx">user</span><span class="p">});</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+  <span class="k">else</span><span class="p">{</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="nx">user</span><span class="o">:</span><span class="kc">undefined</span><span class="p">});</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="nx">exports</span><span class="p">.</span><span class="nx">test</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
@@ -79,11 +89,11 @@
   <span class="p">});</span>
 <span class="p">}</span>
 
+
+<span class="c1">//</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>TODO:  secure this api method!</p></div></div><div class="code"><div class="wrapper"><span class="c1">//</span>
 <span class="nx">exports</span><span class="p">.</span><span class="nx">save</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-  <span class="c1">//console.log(&#39;is this io?&#39;);</span>
-  <span class="c1">//console.log(io);</span>
   <span class="kd">var</span> <span class="nx">event</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
-  <span class="nx">EventProvider</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">e</span><span class="p">){</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>io.sockets.emit('product.added', product);</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//EventProvider.getEvents(0,10,function(err, events){</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>res.send(events);</p></div></div><div class="code"><div class="wrapper">    <span class="c1">//})</span>
+  <span class="nx">EventProvider</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">e</span><span class="p">){</span>
     <span class="nx">io</span><span class="p">.</span><span class="nx">sockets</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">&#39;event.added&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">);</span>
     <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
   <span class="p">});</span>

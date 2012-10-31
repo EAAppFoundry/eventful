@@ -19,13 +19,15 @@
             <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left;&#39;</span>)
               <span class="nt">img</span>(<span class="na">src=</span><span class="s">&#39;images/eventful_one_small.png&#39;</span>)
             <span class="nt">div</span><span class="nc">.logo-text</span> eventful
-            <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left;padding-top:4px;margin-left:60px&#39;</span>)<span class="nc">.message</span> Text &#39;events&#39; to 678-123-4567 to receive a list of events for today!
-            <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:right;padding-top:4px;margin-left:40px&#39;</span>)<span class="nc">.headerLink</span> 
-              <span class="nt">img</span>(<span class="na">src=</span><span class="s">&#39;images/person.png&#39;</span><span class="err">,</span> <span class="na">style=</span><span class="s">&#39;float:left;margin-right:7px;margin-top:1px&#39;</span>)
-              <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left&#39;</span>)<span class="nf">#lnkSignIn</span> Sign in
-        <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:right;padding-top:4px;margin-left:40px&#39;</span>)<span class="nc">.headerLink</span> 
-          <span class="nt">img</span>(<span class="na">src=</span><span class="s">&#39;images/plus.png&#39;</span><span class="err">,</span> <span class="na">style=</span><span class="s">&#39;float:left;margin-right:7px;margin-top:1px&#39;</span>)
-          <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left&#39;</span>) Add a new event
+            <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left;padding-top:4px;margin-left:60px&#39;</span>)<span class="nc">.message</span> Text &#39;events&#39; to 678-929-6049 to receive a list of events for today!
+            <span class="nt">if</span>(<span class="na">user</span>)
+              <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:right;padding-top:4px;margin-left:40px&#39;</span>)<span class="nc">.headerLink</span><span class="nf">#lnkAddNewEvent</span>
+                <span class="nt">img</span>(<span class="na">src=</span><span class="s">&#39;images/plus.png&#39;</span><span class="err">,</span> <span class="na">style=</span><span class="s">&#39;float:left;margin-right:7px;margin-top:1px&#39;</span>)
+                <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left&#39;</span>) Add a new event
+            <span class="nt">else</span>
+              <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:right;padding-top:4px;margin-left:40px&#39;</span>)<span class="nc">.headerLink</span> 
+                <span class="nt">img</span>(<span class="na">src=</span><span class="s">&#39;images/person.png&#39;</span><span class="err">,</span> <span class="na">style=</span><span class="s">&#39;float:left;margin-right:7px;margin-top:1px&#39;</span>)
+                <span class="nt">div</span>(<span class="na">style=</span><span class="s">&#39;float:left&#39;</span>)<span class="nf">#lnkSignIn</span> Sign in
         <span class="nt">div</span><span class="nc">.container</span>
           <span class="nt">block</span> content
     <span class="nt">div</span><span class="nc">.footer</span><span class="nf">#footer</span>
