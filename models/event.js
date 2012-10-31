@@ -1,5 +1,5 @@
 // ##event.js
-// Example of using mongoose to access mongodb
+// ###Example of using mongoose to access mongodb
 
 var mongoose = require('mongoose');
 
@@ -27,7 +27,7 @@ var Event = new Schema({
 // setup the mongodb connection
 mongoose.connect('mongodb://' + db.user + ':' + db.pass + '@' + db.host + ':' + db.port + '/' + db.name, {server: {socketOptions: {keepAlive: 1}}});
 
-// this wires up the modle and the collection in mongodb
+// this wires up the model and the collection in mongodb
 mongoose.model('Event', Event, 'events');
 
 // create an instance of the model for user later
@@ -39,8 +39,7 @@ var Event = mongoose.model('Event');
 EventProvider = function(){};
 
 
-// getEvents(skip, take, func) will return [take] number events
-// starting with [skip] number
+// will return [take] number events starting with [skip] number
 EventProvider.prototype.getEvents = function(skip, take, callback){
 	var today = createTimelessDate();
 
@@ -49,7 +48,7 @@ EventProvider.prototype.getEvents = function(skip, take, callback){
 	});
 };
 
-// getEventsForDate(date, func) will return all events for a given date
+// will return all events for a given date
 EventProvider.prototype.getEventsForDate = function(date, callback){
 
 	Event.find({EventDate:date}, function(err, events){
@@ -57,15 +56,14 @@ EventProvider.prototype.getEventsForDate = function(date, callback){
 	});
 };
 
-// getEventById(id, func) will return the detail of the event that matches
-// the provided id
+// will return the detail of the event that matches the provided id
 EventProvider.prototype.getEventById = function(id, callback){
 	Event.findOne({_id: id}, function(err, event){
 		callback(null, event);
 	});
 };
 
-// queryEvents(query, func) will return events that satisfy the query
+// will return events that satisfy the query
 // the [query] object is a set of {key:value} passed directly to mongodb
 EventProvider.prototype.queryEvents = function(query, callback) {
 	Event.find(query, function(err, events){
@@ -97,14 +95,14 @@ EventProvider.prototype.createEvent = function(event, callback){
 	});
 };  
 
-// clear(func) drops the Events collection
+// drops the Events collection
 EventProvider.prototype.clear = function(callback){
 	Event.collection.drop(function(err){
 		callback();
 	})
 }
 
-// utility functiont that creates a date w/the time component 
+// utility function that creates a date w/the time component 
 // set to 00:00:00.  Good for date queries.
 function createTimelessDate() {
 	var today = new Date();

@@ -1,7 +1,11 @@
+// ##user.js
+// ###This is an example of a mongodb model that doesn't use mongoose
+
+// require in some necessary stuff
 var cryptography = require('../cryptography');
 var db = require('../mongo');
 
-
+// saves the provided [user] to the database
 module.exports.save = function(user, callback){
   user.password = cryptography.createHash(user.password);
   db.insert(user, 'users', function userWasInserted(result){
@@ -10,7 +14,9 @@ module.exports.save = function(user, callback){
 };
 
 
-
+// if you're doing auth stuff, take a look at this example of
+// how to validate a users password against the hash stored in
+// the database. 
 module.exports.signin = function(login, password, func){
 	var ret = undefined;
 
