@@ -1,3 +1,7 @@
+// ##seedEvents.js
+// ####Seeds the database with a number of fake events
+
+// this script is run from the node.exe command-line
 var config = require('../config');
 config.setDevelopmentConfig();
 
@@ -71,7 +75,7 @@ event = {Name: 'News Review', EventDate: new Date('11-01-2012'), Time: '11am-5pm
 				Private: true, Tags: ['cnn', 'news'], PassbookURL: 'https://pass.is/TzkS9R'};
 events.push(event);
 
-
+// clear the collection and repopulate
 EventProvider.clear(function(){
 	for(var i=0;i<events.length;i++) {
 		EventProvider.createEvent(events[i], function(err, event){
@@ -81,6 +85,7 @@ EventProvider.clear(function(){
 
 });
 
+// kill the node process
 process.exit();
 
 
