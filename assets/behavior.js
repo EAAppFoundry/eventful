@@ -198,7 +198,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 "title": "event.js",
                 "slug": "eventjs"
               },
-              "depth": 2
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "Example of using mongoose to access mongodb",
+                    "slug": "example-of-using-mongoose-to-access-mongodb"
+                  },
+                  "depth": 3
+                }
+              ]
             }
           ]
         }, {
@@ -216,7 +227,28 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "user"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "user.js",
+                "slug": "userjs"
+              },
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 3,
+                    "title": "This is an example of a mongodb model that doesn't use mongoose",
+                    "slug": "this-is-an-example-of-a-mongodb-model-that-doesnt-use-mongoose"
+                  },
+                  "depth": 3
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
