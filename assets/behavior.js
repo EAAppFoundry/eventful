@@ -190,7 +190,28 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "addUsers"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "addUsers.js",
+                "slug": "addusersjs"
+              },
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 4,
+                    "title": "Database script",
+                    "slug": "database-script"
+                  },
+                  "depth": 4
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -206,7 +227,28 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "seedEvents"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "seedEvents.js",
+                "slug": "seedeventsjs"
+              },
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 4,
+                    "title": "Seeds the database with a number of fake events",
+                    "slug": "seeds-the-database-with-a-number-of-fake-events"
+                  },
+                  "depth": 4
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
