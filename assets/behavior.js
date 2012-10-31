@@ -117,7 +117,28 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "sms"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "sms.js",
+                "slug": "smsjs"
+              },
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 4,
+                    "title": "Controller for the twilio stuff",
+                    "slug": "controller-for-the-twilio-stuff"
+                  },
+                  "depth": 4
+                }
+              ]
+            }
+          ]
         }
       ]
     }, {
