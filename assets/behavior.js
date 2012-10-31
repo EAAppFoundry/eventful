@@ -54,7 +54,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "Config.js",
             "slug": "configjs"
           },
-          "depth": 2
+          "depth": 2,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 4,
+                "title": "Central place for configuration information",
+                "slug": "central-place-for-configuration-information"
+              },
+              "depth": 4
+            }
+          ]
         }
       ]
     }, {
@@ -164,7 +175,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "cryptography.js",
             "slug": "cryptographyjs"
           },
-          "depth": 2
+          "depth": 2,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 4,
+                "title": "used to hash passwords for login",
+                "slug": "used-to-hash-passwords-for-login"
+              },
+              "depth": 4
+            }
+          ]
         }
       ]
     }, {
@@ -358,7 +380,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "mongo.js",
             "slug": "mongojs"
           },
-          "depth": 2
+          "depth": 2,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 4,
+                "title": "our mongodb utility library",
+                "slug": "our-mongodb-utility-library"
+              },
+              "depth": 4
+            }
+          ]
         }
       ]
     }, {
@@ -384,7 +417,18 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "Routes.js",
             "slug": "routesjs"
           },
-          "depth": 2
+          "depth": 2,
+          "children": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 4,
+                "title": "All the routes for the app",
+                "slug": "all-the-routes-for-the-app"
+              },
+              "depth": 4
+            }
+          ]
         }
       ]
     }, {
