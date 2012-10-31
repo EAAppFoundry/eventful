@@ -240,11 +240,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 {
                   "type": "heading",
                   "data": {
-                    "level": 3,
+                    "level": 4,
                     "title": "This is an example of a mongodb model that doesn't use mongoose",
                     "slug": "this-is-an-example-of-a-mongodb-model-that-doesnt-use-mongoose"
                   },
-                  "depth": 3
+                  "depth": 4
                 }
               ]
             }
