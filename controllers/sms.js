@@ -32,24 +32,17 @@ exports.events = function(req, res){
 	switch(true) {
 		case(body === 'events'):
 			EventProvider.getEventsForDate(d, function(err, events){
-				message += 'Found ' + events.length + ' events: \n';
-				for(var i = 0;i<events.length;i++) {
-					message += events[i].Name + '\n';
-				}
-				console.log('message ' + message);
-				res.send (createResponse(message));
+				console.log(events);
+				var response = formatResponse(body, events);
+				res.send (createResponse(response));
 			})
 			
 			break;
 		
 		case(body === 'cnn' || body === 'techwood' || body === 'twc' || body === 'ct'):
 			EventProvider.queryEvents({EventDate:d, Location: body}, function(err, events){
-				message += 'Found ' + events.length + ' events';
-				for(var i=0;i<events.length;i++) {
-					message += events[i].Name + '\n';
-				}
-				console.log('message ' + message);
-				res.send(createResponse(message));
+				var response = formatResponse(body, events);
+				res.send(createResponse(response));
 			});
 			break;
 
@@ -60,6 +53,27 @@ exports.events = function(req, res){
 
 	
 	
+}
+
+function formatResponse(location, events){
+	var message = '';
+
+	if(events.length === 0) {
+		message += 'There are no events at ' + location + ' today.';
+	} else {
+		if(location === 'events') {
+			message += events.length + ' at all locations today\n';
+		} else {
+			message += events.length + ' event(s) at ' + location + ' today:\n';
+		}
+		
+		for(var i = 0;i<events.length;i++) {
+			message += events[i].Name + '\n';
+		}
+	}
+	console.log('message ' + message);
+	return message;
+				
 }
 
 // this just tacks on the sms wrapper
