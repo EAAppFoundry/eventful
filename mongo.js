@@ -1,5 +1,5 @@
 // ##mongo.js
-// our mongodb utility library
+// ####our mongodb utility library
 var config = require('./config');
 var mongodb = require('./node_modules/mongoose/node_modules/mongodb');
 var events = require('events');

@@ -1,5 +1,5 @@
 // ##Config.js
-// Central place for configuration information
+// ####Central place for configuration information
 
 // config for development environment
 function setDevelopmentConfig(){
