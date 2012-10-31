@@ -1,10 +1,17 @@
+// ##sms.js
+// ####Controller for the twilio stuff
+
+// require and new up the EventProvider
 var EventProvider = require('./../models/event').EventProvider;
 EventProvider = new EventProvider();
 
+// this is a static wrapper that all sms messages sent to the
+// twilio api need.
 var responseHead = '<?xml version="1.0" encoding="UTF-8"?><Response><Sms>';
 var responseTail = '</Sms></Response>';
 
-
+// this method is invoked by twilio when a text is sent
+// to our designated phone number 
 exports.events = function(req, res){
 	var from = req.body.From;
 	var to = req.body.To;
@@ -21,6 +28,7 @@ exports.events = function(req, res){
 	var s = (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getFullYear();
 	var d = new Date(s);
 
+	// bascially just figure out what command was sent, and query the db accordingly
 	switch(true) {
 		case(body === 'events'):
 			EventProvider.getEventsForDate(d, function(err, events){
@@ -54,15 +62,18 @@ exports.events = function(req, res){
 	
 }
 
+// this just tacks on the sms wrapper
 function createResponse(message){
 	return responseHead + message + responseTail;
 }
 
+// this is what's returned if an unrecognized command it send via sms
 function helpString() {
 	var message = "Valid commands are: 'events', 'cnn', 'techwood', and 'twc'";
 	return createResponse(message);
 }
 
+// for testing.. ignore.
 exports.index = function(req, res){
 	res.render('twil');
 }
