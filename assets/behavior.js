@@ -80,7 +80,28 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
             "title": "site"
           },
           "depth": 2,
-          "outline": []
+          "outline": [
+            {
+              "type": "heading",
+              "data": {
+                "level": 2,
+                "title": "site.js",
+                "slug": "sitejs"
+              },
+              "depth": 2,
+              "children": [
+                {
+                  "type": "heading",
+                  "data": {
+                    "level": 4,
+                    "title": "This is an example of a typical controller",
+                    "slug": "this-is-an-example-of-a-typical-controller"
+                  },
+                  "depth": 4
+                }
+              ]
+            }
+          ]
         }, {
           "type": "file",
           "data": {
@@ -203,11 +224,11 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
                 {
                   "type": "heading",
                   "data": {
-                    "level": 3,
+                    "level": 4,
                     "title": "Example of using mongoose to access mongodb",
                     "slug": "example-of-using-mongoose-to-access-mongodb"
                   },
-                  "depth": 3
+                  "depth": 4
                 }
               ]
             }
